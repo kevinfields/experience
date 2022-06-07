@@ -44,11 +44,45 @@ const StorePage = (props) => {
   const buyItem = async (itemObj) => {
     await REMOVE_COINS(props.userRef, itemObj.value).then(res => {
       if (res === 'success') {
-        TAKE_ITEM(props.userRef, props.itemsRef, itemObj);
+        TAKE_ITEM(props.userRef, itemObj);
         setCoins(coins - itemObj.value);
       }
     });
-    loadBankData();
+    // it might be easier to just loadBankData() here but that seems unneccessary if 
+    // I can update the state directly.
+
+    let owned = false;
+    let amount;
+
+    for (const sg of items) {
+      if (sg.item === itemObj.item) {
+        owned = true;
+        amount = sg.amount;
+      } else {
+        amount = 0;
+      }
+    }
+
+    if (owned) {
+      const newData = {
+        item: itemObj.item,
+        amount: amount + 1,
+        value: itemObj.value * (Number(amount) + 1),
+      };
+      let itemCatcher = items.filter(item => item.item !== itemObj.item);
+      itemCatcher.push(newData);
+      setItems(itemCatcher);
+    } else {
+
+      const newData = {
+        item: itemObj.item,
+        amount: 1,
+        value: itemObj.value,
+      }
+      let itemCatcher = [...items];
+      itemCatcher.push(newData);
+      setItems(itemCatcher);
+    }
   };
 
   const sellItem = async (itemObj, amount) => {
@@ -61,16 +95,22 @@ const StorePage = (props) => {
         setCoins(Number(coins) + Number(price))
       }
     });
-    loadBankData();
+    
+    let itemsCatcher = [...items];
+    for (const sg of itemsCatcher) {
+      if (sg.item === itemObj.item) {
+        sg.amount = sg.amount - amount;
+        sg.value = sg.value - (price * amount)
+      }
+    }
+    itemsCatcher.filter(item => item.amount > 0);
+    setItems(itemsCatcher); 
   };
 
   useEffect(() => {
     loadBankData();
   }, []);
 
-  useEffect(() => {
-    loadBankData();
-  }, [mode])
 
   return (
     <div className='page'>
@@ -95,7 +135,7 @@ const StorePage = (props) => {
                   <button 
                     className='buy-item-button'
                     onClick={() => buyItem({
-                      name: 'cooking_pan',
+                      item: 'cooking_pan',
                       amount: 1,
                       value: 5,
                     })}>

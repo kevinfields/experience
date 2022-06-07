@@ -1,21 +1,14 @@
 
-export default async function TAKE_ITEM(userRef, itemsRef, itemObject) {
+export default async function TAKE_ITEM(userRef, itemObject) {
 
 
-  let value;
-  if (!itemObject.value) {
-    await itemsRef.doc(itemObject.name).get().then(doc => {
-      value = doc.data().value;
-    })
-  } else {
-    value = itemObject.value;
-  }
-  
+ 
+  let value = itemObject.value;
   value = value * itemObject.amount;
 
-  await userRef.collection('items').doc(itemObject.name).get().then(doc => {
+  await userRef.collection('items').doc(itemObject.item).get().then(doc => {
     if (doc.data() === undefined) {
-      userRef.collection('items').doc(itemObject.name).set({
+      userRef.collection('items').doc(itemObject.item).set({
         amount: itemObject.amount,
         value: value,
       })
@@ -28,14 +21,14 @@ export default async function TAKE_ITEM(userRef, itemsRef, itemObject) {
 
     let currentVals;
 
-    await userRef.collection('items').doc(obj.name).get().then(doc => {
+    await userRef.collection('items').doc(obj.item).get().then(doc => {
       currentVals = {
         value: doc.data().value,
         amount: doc.data().amount,
       }
     });
 
-    userRef.collection('items').doc(obj.name).set({
+    userRef.collection('items').doc(obj.item).set({
       value: Number(currentVals.value) + Number(value),
       amount: Number(currentVals.amount) + Number(obj.amount),
     })
