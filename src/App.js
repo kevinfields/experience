@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import BankPage from './pages/BankPage';
 import StorePage from './pages/StorePage';
+import OutsidePage from './pages/OutsidePage';
 
 
 firebase.initializeApp({
@@ -70,6 +71,12 @@ function App() {
                   itemsRef={firestore.collection('items')}
                 />}
             />
+            <Route
+              path='/outside'
+              element={
+                <OutsidePage userRef={firestore.collection('users').doc(user.uid)} />
+              }
+            />
           </>
         }
       </Routes>
@@ -79,6 +86,7 @@ function App() {
             <Link className='link' to="/">Home</Link>
             <Link className='link' to='/my-bank'>Bank</Link>
             <Link className='link' to='/general-store'>General Store</Link>
+            <Link className='link' to='/outside'>Outside</Link>
           </>
         ) : null}
       </div>
