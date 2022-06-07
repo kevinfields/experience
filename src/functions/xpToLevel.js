@@ -1,3 +1,5 @@
+import { LEVELS } from "../data/LEVELS";
+
 /* TABLE
   starting with a 0-10 jump, the next jump can be calculated as 1.5x the last jump rounded up
   1: 0,
@@ -23,7 +25,7 @@
 */
 export default function xpToLevel(xp) {
 
-  const levels = [0, 10, 25, 48, 82, 132, 208, 322, 493, 750, 1007, 1393, 1972, 2841, 4145, 6101, 9035, 13436, 20038, 30000];
+  const levels = [...LEVELS];
 
   if (levels.includes(xp)) {
     return levels.indexOf(xp) + 1;
