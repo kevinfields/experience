@@ -103,7 +103,7 @@ const StorePage = (props) => {
         sg.value = sg.value - (price * amount)
       }
     }
-    itemsCatcher.filter(item => item.amount > 0);
+    itemsCatcher = itemsCatcher.filter(item => item.amount > 0);
     setItems(itemsCatcher); 
   };
 
