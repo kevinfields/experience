@@ -1,0 +1,9 @@
+.loading-screen {
+  position: fixed;
+  left: 50vw;
+  top: 35vh;
+  width: 20vw;
+  height: 30vh;
+  color: red;
+  font-size: 26pt;
+}

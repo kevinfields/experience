@@ -1,0 +1,13 @@
+.level-display {
+  display: flex;
+  flex-direction: row;
+  gap: 1vw;
+  width: 30vw;
+  justify-content: space-between;
+}
+
+.level-display-item {
+  min-width: 9vw;
+  height: 5vh;
+  font-size: 15pt;
+}

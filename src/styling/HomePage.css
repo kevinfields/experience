@@ -1,0 +1,20 @@
+.user-info-header {
+  text-align: center;
+  font-size: 18pt;
+  text-shadow: 2px 2px rgb(234, 0, 255);
+}
+
+.level-display-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  position: fixed;
+  left: 40vw;
+  top: 25vh;
+}
+
+.stats-header { 
+  margin: 0px;
+  text-align: center;
+  font-size: 15pt;
+}
