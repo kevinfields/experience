@@ -38,7 +38,7 @@ const LoginPage = (props) => {
         lastLogin: loginTime,
         username: username,
         email: user.email,
-        agilityXp: 0,
+        fitnessXp: 0,
         constructionXp: 0,
         cookingXp: 0,
         craftingXp: 0,
@@ -48,10 +48,12 @@ const LoginPage = (props) => {
       });
       await props.usersRef.doc(user.uid).collection('items').doc('coins').set({
         amount: Number(100),
+        value: Number(100),
       });
       await props.takenNamesRef.set({
         list: allNamesList.concat(username)
       });
+      props.nav('/');
     }
   };
 

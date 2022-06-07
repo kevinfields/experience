@@ -29,6 +29,9 @@ function App() {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
+  if (!user) {
+    navigate('/login');
+  }
 
   return (
     <div className="App">
@@ -37,7 +40,7 @@ function App() {
         <>
           <Route
             exact
-            path="/"
+            path="/login"
             element={
               <LoginPage
                 nav={navigate}
