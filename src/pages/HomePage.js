@@ -8,7 +8,6 @@ const HomePage = (props) => {
 
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [taken, setTaken] = useState(false);
 
   const loadUserData = async () => {
 
@@ -16,14 +15,6 @@ const HomePage = (props) => {
       setUserData(doc.data());
       setLoading(false);
     })
-  }
-  
-  const takeCookingPan = () => {
-    TAKE_ITEM(props.userRef, props.itemsRef, {
-      name: 'cooking_pan',
-      amount: 1,
-    })
-    setTaken(true);
   }
 
   useEffect(() => {
@@ -49,12 +40,6 @@ const HomePage = (props) => {
             <LevelDisplay skill='Hunting' xp={userData.huntingXp} />
             <LevelDisplay skill='Medicine' xp={userData.medicineXp} />
           </div>
-          {!taken ? 
-          <div className='free-item'>
-            Take a free cooking pan {"("}$5 value{")"}
-            <button onClick={() => takeCookingPan()}>Take</button>
-          </div>
-          : null}
         </div>
       }
     </div>

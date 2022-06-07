@@ -1,11 +1,16 @@
 
 export default async function TAKE_ITEM(userRef, itemsRef, itemObject) {
 
-  let value;
-  await itemsRef.doc(itemObject.name).get().then(doc => {
-    value = doc.data().value;
-  })
 
+  let value;
+  if (!itemObject.value) {
+    await itemsRef.doc(itemObject.name).get().then(doc => {
+      value = doc.data().value;
+    })
+  } else {
+    value = itemObject.value;
+  }
+  
   value = value * itemObject.amount;
 
   await userRef.collection('items').doc(itemObject.name).get().then(doc => {

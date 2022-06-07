@@ -64,7 +64,11 @@ function App() {
             />
             <Route
               path='/general-store'
-              element={<StorePage userRef={firestore.collection('users').doc(user.uid)} />}
+              element={
+                <StorePage 
+                  userRef={firestore.collection('users').doc(user.uid)} 
+                  itemsRef={firestore.collection('items')}
+                />}
             />
           </>
         }

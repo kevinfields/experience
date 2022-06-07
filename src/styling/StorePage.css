@@ -1,5 +1,7 @@
 .store-header {
   text-align: center;
+  font-size: 18pt;
+  text-shadow: 2px 2px magenta;
 }
 
 .money-header {
@@ -29,4 +31,51 @@
   font-size: 15pt;
   border: none;
   margin-top: -0.35vh;
+}
+
+.store-wares-screen {
+  border: 1px solid white;
+  width: 76vw;
+  height: 64vh;
+  position: fixed;
+  left: 16vw;
+  top: 21vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1vw;
+  padding: 1vw;
+}
+
+.bank-items-screen {
+  border: 1px solid white;
+  width: 76vw;
+  height: 64vh;
+  position: fixed;
+  left: 16vw;
+  top: 21vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1vw;
+  padding: 1vw;
+}
+
+.store-item {
+  width: 8.5vw;
+  height: 10vw;
+}
+
+.buy-item-button {
+  background-color: transparent;
+  border-radius: 5px;
+  width: 8.4vw;
+  height: 3vh;
+  border-color: red;
+  color: red;
+}
+
+.buy-item-button:hover {
+  cursor: pointer;
+  background-color: skyblue;
 }
