@@ -113,7 +113,7 @@ const Quadrant2 = (props) => {
         await props.featuresRef.doc('farm_patch').set(newData);
         props.addToFeed('You get 10 carrots, and 30 farming xp.');
       } else {
-        props.addToFeed('Your carrots are still growing!');
+        props.addToFeed(`Your carrots will be ready in ${Math.floor(100 - ((time - startTime) / 1000))} seconds.`);
         console.log('time: ' + time);
         console.log('startTime: ' + startTime)
         console.log('elapsed: ' + (time - startTime))

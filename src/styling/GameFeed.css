@@ -1,9 +1,9 @@
 .game-feed {
   position: fixed;
   left: 15vw;
-  top: 60vh;
-  width: 80vw;
-  height: 30vh;
+  top: 67.25vh;
+  width: 30vw;
+  height: 22.75vh;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
