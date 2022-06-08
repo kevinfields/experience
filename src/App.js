@@ -8,7 +8,6 @@ import LoginPage from './pages/LoginPage';
 import BankPage from './pages/BankPage';
 import StorePage from './pages/StorePage';
 import OutsidePage from './pages/OutsidePage';
-import HomeRedirect from './pages/HomeRedirect';
 import LogoutPage from './pages/LogoutPage';
 import { useEffect, useState } from 'react';
 import CreateAccountPage from './pages/CreateAccountPage';

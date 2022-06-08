@@ -1,4 +1,3 @@
-import { getMultiFactorResolver } from 'firebase/auth';
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import FarmPatch from '../game-objects/FarmPatch';
@@ -79,6 +78,11 @@ const Quadrant2 = (props) => {
   }
 
   const farmItems = async () => {
+
+    if (position.x < 35 || position.x > 51 || position.y < 43 || position.y > 62) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
 
     let farmData;
     await props.featuresRef.doc('farm_patch').get().then(doc => {

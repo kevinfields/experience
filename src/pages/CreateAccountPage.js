@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 
+const valid = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+
 const CreateAccountPage = (props) => {
 
   const [taken, setTaken] = useState([]);
@@ -29,6 +31,13 @@ const CreateAccountPage = (props) => {
     if (nameArr.length < 2) {
       alert('Your name must be at least two characters.');
       return;
+    }
+
+    for (const letter of nameArr) {
+      if (!valid.includes(letter.toLowerCase())) {
+        alert('You may only use letters, numbers, and spaces.');
+        return;
+      }
     }
 
     if (window.confirm('Are you sure? This username cannot be changed.')) {
