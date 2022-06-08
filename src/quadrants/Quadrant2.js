@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import FarmPatch from '../game-objects/FarmPatch';
+import Tree from '../game-objects/Tree';
 import ADD_XP from '../reducers/ADD_XP';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
 import '../styling/Quadrant2.css';
@@ -102,9 +103,6 @@ const Quadrant2 = (props) => {
       let time = new Date().getTime();
       let startTime = farmData.startTime.seconds * 1000;
       if (time - startTime > 100000) {
-        console.log('time: ' + time);
-        console.log('startTime: ' + startTime)
-        console.log('elapsed: ' + time - startTime)
         const newData = {
           currentlyFarming: false,
         };
@@ -118,9 +116,6 @@ const Quadrant2 = (props) => {
         props.addToFeed('You get 10 carrots, and 30 farming xp.');
       } else {
         props.addToFeed(`Your carrots will be ready in ${Math.floor(100 - ((time - startTime) / 1000))} seconds.`);
-        console.log('time: ' + time);
-        console.log('startTime: ' + startTime)
-        console.log('elapsed: ' + (time - startTime))
       }
     } else {
       let carrotSeeds = {
@@ -154,7 +149,72 @@ const Quadrant2 = (props) => {
       } else {
         props.addToFeed('You need a carrot seed to do that.');
       }
-    } 
+    }
+
+  }
+
+
+  const cutTree = async () => {
+    if (position.x < 35 || position.x > 51 || position.y < 43 || position.y > 62) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
+
+    let treeData;
+    await props.featuresRef.doc('tree').get().then(doc => {
+      treeData = doc.data();
+    });
+
+    if (treeData === undefined) {
+      props.featuresRef.doc('tree').set({
+        currentlyCut: false,
+      })
+      treeData = {
+        currentlyCut: false,
+      }
+    };
+
+    if (!treeData.currentlyCut) {
+
+      let axe = false;
+      await props.itemsRef.get().then(snap => {
+        snap.forEach(doc => {
+          if (doc.id === 'axe'){
+            axe = true;
+          }
+        })
+      })
+      if (axe) {
+        await TAKE_ITEM(props.userRef, {
+          item: 'logs',
+          amount: 1,
+          value: 5,
+        });
+        await ADD_XP(props.userRef, 'fitness', 10);
+        await props.featuresRef.doc('tree').set({
+          currentlyCut: true,
+          cutTime: new Date(),
+        });
+        props.addToFeed('You cut down the tree, gaining 1 log and 10 fitness xp.')
+      } else {
+        props.addToFeed('You need an axe to do that.')
+      }
+    } else {
+
+      const timestamp = new Date();
+      const cutTime = treeData.cutTime.seconds * 1000;
+      const remainder = Math.floor(100 - ((timestamp - cutTime) / 1000));
+
+      if (remainder > 0) {
+        props.addToFeed(`The tree is currently cut, it will regrow in ${remainder} seconds.`)
+      } else {
+        await props.featuresRef.doc('tree').set({
+          currentlyCut: false,
+        }).then(() => {
+          cutTree();
+        })
+      }
+    }
   }
 
 
@@ -163,6 +223,7 @@ const Quadrant2 = (props) => {
       <h3 className='quad-header'>Quadrant 2: The Woods</h3>
       <Player x={position.x} y={position.y} />
       <FarmPatch farm={() => farmItems()} />
+      <Tree cutTree={() => cutTree()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )
