@@ -53,14 +53,12 @@ const StorePage = (props) => {
     // I can update the state directly.
 
     let owned = false;
-    let amount;
+    let amount = 0;
 
     for (const sg of items) {
       if (sg.item === itemObj.item) {
         owned = true;
         amount = sg.amount;
-      } else {
-        amount = 0;
       }
     }
 
