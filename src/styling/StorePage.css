@@ -62,14 +62,14 @@
 }
 
 .store-item {
-  width: 8.5vw;
-  height: 10vw;
+  width: 9vw;
+  height: 9vw;
 }
 
 .buy-item-button {
   background-color: transparent;
   border-radius: 5px;
-  width: 8.4vw;
+  width: 9.4vw;
   height: 3vh;
   border-color: red;
   color: red;
@@ -78,4 +78,19 @@
 .buy-item-button:hover {
   cursor: pointer;
   background-color: skyblue;
+}
+
+
+.sell-item-button {
+  background-color: transparent;
+  border-radius: 5px;
+  width: 9.4vw;
+  height: 3vh;
+  border-color: orange;
+  color: orange;
+}
+
+.sell-item-button:hover {
+  background-color: yellow;
+  cursor: pointer;
 }

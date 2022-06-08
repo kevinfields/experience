@@ -1,17 +1,79 @@
 import React, {useState, useEffect} from 'react'
-import ADD_XP from '../reducers/ADD_XP'
+import GameFeed from '../components/GameFeed';
+import Quadrant1 from '../quadrants/Quadrant1';
+import Quadrant2 from '../quadrants/Quadrant2';
+import Quadrant3 from '../quadrants/Quadrant3';
+import Quadrant4 from '../quadrants/Quadrant4';
+import '../styling/OutsidePage.css';
 
 const OutsidePage = (props) => {
 
-  const freeFarmingXp = async () => {
-    await ADD_XP(props.userRef, 'farming', 1);
+  const [quadrant, setQuadrant] = useState(1);
+  const [startCoord, setStartCoord] = useState(20);
+  const [axis, setAxis] = useState('y');
+  const [feed, setFeed] = useState([{id: 0, text: 'Welcome to Experience World'}]);
+
+  const quadrantSwitcher = (quad, start, axis) => {
+ 
+    setQuadrant(quad);
+    setStartCoord(start);
+    setAxis(axis)
+  }
+
+  const feedUpdater = (text) => {
+
+    const feedItem = {
+      id: feed.length,
+      text: text,
+    }
+    setFeed(feed.concat(feedItem));
   }
 
   return (
     <div className='page'>
-      <div className='free-farming-xp' onClick={() => freeFarmingXp()}>
-        Click here for free farming xp.
-      </div>
+      {
+        quadrant === 1 ? 
+        <Quadrant1 
+          startX={axis === 'x' ? startCoord : 91} 
+          startY={axis === 'y' ? startCoord : 10} 
+          switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
+          itemsRef={props.itemsRef}
+          userRef={props.userRef}
+          featuresRef={props.featuresRef}
+          addToFeed={(text) => feedUpdater(text)}
+        />
+        : quadrant === 2 ? 
+        <Quadrant2 
+          startX={axis === 'x' ? startCoord : 15} 
+          startY={axis === 'y' ? startCoord : 10} 
+          switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
+          itemsRef={props.itemsRef}
+          userRef={props.userRef}
+          featuresRef={props.featuresRef}
+          addToFeed={(text) => feedUpdater(text)}
+        />
+        : quadrant === 3 ? 
+        <Quadrant3
+          startX={axis === 'x' ? startCoord : 91} 
+          startY={axis === 'y' ? startCoord : 85} 
+          switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
+          itemsRef={props.itemsRef}
+          userRef={props.userRef}
+          featuresRef={props.featuresRef}
+          addToFeed={(text) => feedUpdater(text)}
+        />
+        : 
+        <Quadrant4 
+          startX={axis === 'x' ? startCoord : 15} 
+          startY={axis === 'y' ? startCoord : 85} 
+          switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)}  
+          itemsRef={props.itemsRef}
+          userRef={props.userRef}
+          featuresRef={props.featuresRef}
+          addToFeed={(text) => feedUpdater(text)}
+        />
+      }
+      <GameFeed items={feed} />
     </div>
   )
 }

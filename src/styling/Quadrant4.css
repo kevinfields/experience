@@ -1,0 +1,6 @@
+.quad-4 {
+  border: 1px solid rgb(88, 88, 88);
+  width: 80vw;
+  height: 80vh;
+  background-color: gray;
+}

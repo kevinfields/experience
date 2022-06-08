@@ -10,7 +10,7 @@ import StorePage from './pages/StorePage';
 import OutsidePage from './pages/OutsidePage';
 import HomeRedirect from './pages/HomeRedirect';
 import LogoutPage from './pages/LogoutPage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CreateAccountPage from './pages/CreateAccountPage';
 
 
@@ -23,15 +23,35 @@ firebase.initializeApp({
   appId: "1:590954449427:web:c61ce099bbe7679a4c8de6"
 });
 
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
+
+
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
+
+
 function App() {
+
+  
 
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        navigate('/')
+      } else {
+        navigate('/login')
+      }
+    });
+  }, [user])
+  
+
+
   const [allow, setAllow] = useState(false);
 
   const loginUser = () => {
@@ -96,7 +116,12 @@ function App() {
             <Route
               path='/outside'
               element={
-                <OutsidePage userRef={firestore.collection('users').doc(user.uid)} />
+                <OutsidePage 
+                  userRef={firestore.collection('users').doc(user.uid)} 
+                  allItemsRef={firestore.collection('items')}
+                  itemsRef={firestore.collection('users').doc(user.uid).collection('items')}
+                  featuresRef={firestore.collection('users').doc(user.uid).collection('game_features')}
+                />
               }
             />
           </>

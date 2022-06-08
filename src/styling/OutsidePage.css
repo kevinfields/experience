@@ -1,12 +1,17 @@
-.free-farming-xp {
-  width: 10vw;
-  height: 10vh;
+.quad-header {
+  position: fixed;
+  top: 2vh;
+  height: 4vh;
+  left: 40vw;
+  width: 20vw;
+  text-align: center;
   border: 1px solid white;
-  background-color: darkgreen;
-  color: white;
+  background-color: black;
 }
 
-.free-farming-xp:hover {
-  cursor: pointer;
-  background-color: green;
+.control-ref {
+  width: 0.5vw;
+  height: 0.5vh;
+  position: fixed;
+  top: -5vh;
 }

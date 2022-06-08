@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Item from '../components/Item';
 import LoadingScreen from '../components/LoadingScreen';
+import StoreItem from '../components/StoreItem';
 import formatCollectionName from '../functions/formatCollectionName';
 import ADD_COINS from '../reducers/ADD_COINS';
 import REMOVE_COINS from '../reducers/REMOVE_COINS';
@@ -130,25 +131,33 @@ const StorePage = (props) => {
             </div>
             { mode === 'buy' ?
               <div className='store-wares-screen'>
-                <div className='store-item'>
-                  <Item item='cooking_pan' value={5} />
-                  <button 
-                    className='buy-item-button'
-                    onClick={() => buyItem({
-                      item: 'cooking_pan',
-                      amount: 1,
-                      value: 5,
-                    })}>
-                      Buy
-                  </button> 
-                </div>
+              <StoreItem 
+                buyItem={(obj) => buyItem(obj)}
+                item={'cooking_pan'}
+                value={5} 
+              />
+              <StoreItem 
+                buyItem={(obj) => buyItem(obj)}
+                item={'carrot_seed'}
+                value={2} 
+              />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={'hunting_bow'}
+                value={50}
+              />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={'arrows'}
+                value={3}
+              />
               </div>
             : 
               <div className='bank-items-screen'>
                 {items.map(item => (
                   <div className='store-item'>
                     <Item item={formatCollectionName(item.item)} amount={item.amount} value={item.value} />
-                    <button onClick={() => sellItem(item, 1)}>Sell 1</button>
+                    <button className='sell-item-button' onClick={() => sellItem(item, 1)}>Sell 1</button>
                   </div>
                 ))}
               </div>

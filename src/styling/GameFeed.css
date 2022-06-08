@@ -1,0 +1,16 @@
+.game-feed {
+  position: fixed;
+  left: 15vw;
+  top: 60vh;
+  width: 80vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  border: 1px solid blue;
+  color: black;
+}
+
+.game-feed-item {
+  border: 1px solid red;
+}
