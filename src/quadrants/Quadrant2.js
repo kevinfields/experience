@@ -155,7 +155,7 @@ const Quadrant2 = (props) => {
 
 
   const cutTree = async () => {
-    if (position.x < 35 || position.x > 51 || position.y < 43 || position.y > 62) {
+    if (position.x > 76 || position.x < 65 || position.y < 59 || position.y > 71) {
       props.addToFeed('You are too far away from that.');
       return;
     }
@@ -220,7 +220,7 @@ const Quadrant2 = (props) => {
 
   return (
     <div className='quad-2' onClick={() => dummy.current.focus()}>
-      <h3 className='quad-header'>Quadrant 2: The Woods</h3>
+      <h3 className='quad-header'>Quadrant 2: The Plains</h3>
       <Player x={position.x} y={position.y} />
       <FarmPatch farm={() => farmItems()} />
       <Tree cutTree={() => cutTree()} />
