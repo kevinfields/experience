@@ -8,6 +8,10 @@ import LoginPage from './pages/LoginPage';
 import BankPage from './pages/BankPage';
 import StorePage from './pages/StorePage';
 import OutsidePage from './pages/OutsidePage';
+import HomeRedirect from './pages/HomeRedirect';
+import LogoutPage from './pages/LogoutPage';
+import { useState } from 'react';
+import CreateAccountPage from './pages/CreateAccountPage';
 
 
 firebase.initializeApp({
@@ -28,31 +32,46 @@ function App() {
 
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+  const [allow, setAllow] = useState(false);
 
-  if (!user) {
-    navigate('/login');
+  const loginUser = () => {
+    setAllow(true);
   }
 
   return (
     <div className="App">
       <Routes>
-        {!user ? 
+        {!allow ? 
         <>
           <Route
             exact
-            path="/login"
+            path="/"
             element={
               <LoginPage
                 nav={navigate}
                 auth={auth}
                 usersRef={firestore.collection("users")}
                 takenNamesRef={firestore.collection("taken_names").doc('all_names')}
+                onLogin={() => loginUser()}
+              />
+            }
+          />
+          <Route
+            path='/create-account'
+            element={
+              <CreateAccountPage
+                nav={navigate}
+                user={user}
+                usersRef={firestore.collection('users')}
+                takenNamesRef={firestore.collection('taken_names').doc('all_names')}
+                onLogin={() => loginUser()}
               />
             }
           />
         </>
         :
           <>
+            <Route path='/logout' element={<LogoutPage nav={navigate} auth={auth} />} />
             <Route 
               exact path={'/'}
               element={
@@ -84,12 +103,13 @@ function App() {
         }
       </Routes>
       <div className="nav-links">
-        {user ? (
+        {allow ? (
           <>
             <Link className='link' to="/">Home</Link>
             <Link className='link' to='/my-bank'>Bank</Link>
             <Link className='link' to='/general-store'>General Store</Link>
             <Link className='link' to='/outside'>Outside</Link>
+            <Link className='link' to='/logout'>Logout</Link>
           </>
         ) : null}
       </div>

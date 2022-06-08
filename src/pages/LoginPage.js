@@ -18,52 +18,23 @@ const LoginPage = (props) => {
       });
 
     if (data !== undefined) {
-      return;
+      return true;
     } else {
-  
-      let allNamesList = [];
-      await props.takenNamesRef.get().then(doc => {
-        allNamesList = doc.data().list;
-      });
-
-      let username = prompt('Please enter a username: ');
-
-      while (allNamesList.includes(username)) {
-        username = prompt('That name has already been selected. Please enter a different one.')
-      }
-
-      const loginTime = new Date();
-      await props.usersRef.doc(user.uid).set({
-        accountBirthday: loginTime,
-        lastLogin: loginTime,
-        username: username,
-        email: user.email,
-        fitnessXp: 0,
-        constructionXp: 0,
-        cookingXp: 0,
-        craftingXp: 0,
-        farmingXp: 0,
-        huntingXp: 0,
-        medicineXp: 0,
-      });
-      await props.usersRef.doc(user.uid).collection('items').doc('coins').set({
-        amount: Number(100),
-        value: Number(100),
-      });
-      await props.takenNamesRef.set({
-        list: allNamesList.concat(username)
-      });
-      props.nav('/');
+      return false;
     }
   };
 
   const login = async () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     props.auth.signInWithPopup(provider).then((data) => {
-      makeAccountIfNone(data.user).then(() => {
-        ADD_SIGN_IN(props.usersRef.doc(data.user.uid), new Date());
+      makeAccountIfNone(data.user).then((res) => {
+        if (res) {
+          ADD_SIGN_IN(props.usersRef.doc(data.user.uid), new Date());
+          props.onLogin();
+        } else {
+          props.nav('/create-account')
+        }
       })
-      props.nav('/');
     });
   };
 
