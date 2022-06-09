@@ -52,6 +52,11 @@ function App() {
 
 
   const [allow, setAllow] = useState(false);
+  const [startCoords, setStartCoords] = useState({
+    quad: 0,
+    x: 0,
+    y: 0,
+  });
 
   const loginUser = () => {
     setAllow(true);
@@ -120,6 +125,8 @@ function App() {
                   allItemsRef={firestore.collection('items')}
                   itemsRef={firestore.collection('users').doc(user.uid).collection('items')}
                   featuresRef={firestore.collection('users').doc(user.uid).collection('game_features')}
+                  saveStartCoords={(coordsObj) => setStartCoords(coordsObj)}
+                  startCoords={startCoords}
                 />
               }
             />
@@ -131,7 +138,7 @@ function App() {
           <>
             <Link className='link' to="/">Home</Link>
             <Link className='link' to='/my-bank'>Bank</Link>
-            <Link className='link' to='/general-store'>General Store</Link>
+            {/* <Link className='link' to='/general-store'>General Store</Link> */}
             <Link className='link' to='/outside'>Outside</Link>
             <Link className='link' to='/logout'>Logout</Link>
           </>

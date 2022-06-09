@@ -11,6 +11,11 @@ const OutsidePage = (props) => {
   const [quadrant, setQuadrant] = useState(1);
   const [startCoord, setStartCoord] = useState(20);
   const [axis, setAxis] = useState('y');
+  const [exactStart, setExactStart] = useState(false);
+  const [exactCoords, setExactCoords] = useState({
+    x: 0,
+    y: 0,
+  })
   const [feed, setFeed] = useState([{id: 0, text: 'Welcome to Experience World'}]);
   const [regrownTree, setRegrownTree] = useState(false);
 
@@ -37,13 +42,24 @@ const OutsidePage = (props) => {
     }, 100000)
   }
 
+  useEffect(() => {
+    if (props.startCoords.quad !== 0) {
+      setQuadrant(props.startCoords.quad);
+      setExactStart(true);
+      setExactCoords({
+        x: props.startCoords.x,
+        y: props.startCoords.y,
+      })
+    }
+  }, [])
+
   return (
     <div className='page'>
       {
         quadrant === 1 ? 
         <Quadrant1 
-          startX={axis === 'x' ? startCoord : 91} 
-          startY={axis === 'y' ? startCoord : 10} 
+          startX={exactCoords.x !== 0 ? exactCoords.x : axis === 'x' ? startCoord : 91} 
+          startY={exactCoords.y !== 0 ? exactCoords.y : axis === 'y' ? startCoord : 10} 
           switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
           itemsRef={props.itemsRef}
           userRef={props.userRef}
@@ -52,8 +68,8 @@ const OutsidePage = (props) => {
         />
         : quadrant === 2 ? 
         <Quadrant2 
-          startX={axis === 'x' ? startCoord : 15} 
-          startY={axis === 'y' ? startCoord : 10} 
+          startX={exactCoords.x !== 0 ? exactCoords.x : axis === 'x' ? startCoord : 15} 
+          startY={exactCoords.y !== 0 ? exactCoords.y : axis === 'y' ? startCoord : 10} 
           switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
           itemsRef={props.itemsRef}
           userRef={props.userRef}
@@ -64,8 +80,8 @@ const OutsidePage = (props) => {
         />
         : quadrant === 3 ? 
         <Quadrant3
-          startX={axis === 'x' ? startCoord : 91} 
-          startY={axis === 'y' ? startCoord : 85} 
+          startX={exactCoords.x !== 0 ? exactCoords.x : axis === 'x' ? startCoord : 91} 
+          startY={exactCoords.y !== 0 ? exactCoords.y : axis === 'y' ? startCoord : 85} 
           switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)} 
           itemsRef={props.itemsRef}
           userRef={props.userRef}
@@ -74,13 +90,18 @@ const OutsidePage = (props) => {
         />
         : 
         <Quadrant4 
-          startX={axis === 'x' ? startCoord : 15} 
-          startY={axis === 'y' ? startCoord : 85} 
+          startX={exactCoords.x !== 0 ? exactCoords.x : axis === 'x' ? startCoord : 15} 
+          startY={exactCoords.y !== 0 ? exactCoords.y : axis === 'y' ? startCoord : 85} 
           switchQuadrant={(quad, start, axis) => quadrantSwitcher(quad, start, axis)}  
           itemsRef={props.itemsRef}
           userRef={props.userRef}
           featuresRef={props.featuresRef}
           addToFeed={(text) => feedUpdater(text)}
+          onEnterStore={() => props.saveStartCoords({
+            quad: 4,
+            x: 50,
+            y: 58,
+          })}
         />
       }
       <GameFeed items={feed} />

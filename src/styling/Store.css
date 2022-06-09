@@ -1,0 +1,10 @@
+.store {
+  position: fixed;
+  left: 47vw;
+  bottom: 47vh;
+  width: 10vw;
+  height: 10vh;
+  background-color: yellow;
+  border: 1px solid rgb(0, 0, 0);
+  color: black;
+}
