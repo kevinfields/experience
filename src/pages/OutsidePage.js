@@ -12,6 +12,7 @@ const OutsidePage = (props) => {
   const [startCoord, setStartCoord] = useState(20);
   const [axis, setAxis] = useState('y');
   const [feed, setFeed] = useState([{id: 0, text: 'Welcome to Experience World'}]);
+  const [regrownTree, setRegrownTree] = useState(false);
 
   const quadrantSwitcher = (quad, start, axis) => {
  
@@ -27,6 +28,13 @@ const OutsidePage = (props) => {
       text: text,
     }
     setFeed(feed.concat(feedItem));
+  }
+
+  const regrowTree = () => {
+    setRegrownTree(false);
+    setTimeout(() => {
+      setRegrownTree(true);
+    }, 100000)
   }
 
   return (
@@ -51,6 +59,8 @@ const OutsidePage = (props) => {
           userRef={props.userRef}
           featuresRef={props.featuresRef}
           addToFeed={(text) => feedUpdater(text)}
+          onCutTree={() => regrowTree()}
+          regrown={regrownTree}
         />
         : quadrant === 3 ? 
         <Quadrant3

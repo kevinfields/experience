@@ -1,0 +1,19 @@
+.tree {
+  position: fixed;
+  left: 70vw;
+  top: 30vh;
+  width: 5vw;
+  height: 5vh;
+  border: 1px solid saddlebrown;
+  background-color: saddlebrown;
+}
+
+.tree-cut {
+  position: fixed;
+  left: 70vw;
+  top: 30vh;
+  width: 5vw;
+  height: 5vh;
+  border: 1px solid saddlebrown;
+  background-color: green;
+}

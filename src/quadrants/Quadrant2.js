@@ -13,11 +13,28 @@ const Quadrant2 = (props) => {
     y: props.startY,
   });
   const [move, setMove] = useState('');
+  const [tree, setTree] = useState(false);
 
   const dummy = useRef();
 
+  const checkTree = async () => {
+
+    let currentTime = new Date().getTime();
+    await props.featuresRef.doc('tree').get().then(doc => {
+      let lastCutTime = doc.data().cutTime.seconds * 1000;
+      console.log('currentTime: ' + currentTime);
+      console.log('lastCutTime: ' + lastCutTime);
+      console.log('difference: ' + (currentTime - lastCutTime))
+      if (currentTime - lastCutTime > 100000) {
+        setTree(true);
+      }
+    })
+    
+  }
+
   useEffect(() => {
     dummy.current.focus();
+    checkTree();   
   }, [])
 
   useEffect(() => {
@@ -45,6 +62,12 @@ const Quadrant2 = (props) => {
     }
 
   }, [position]);
+
+  useEffect(() => {
+    if (props.regrown) {
+      setTree(true);
+    }
+  }, [props.regrown])
 
   const changePosition = (move) => {
     switch (move.toLowerCase()) {
@@ -195,7 +218,9 @@ const Quadrant2 = (props) => {
           currentlyCut: true,
           cutTime: new Date(),
         });
-        props.addToFeed('You cut down the tree, gaining 1 log and 10 fitness xp.')
+        props.addToFeed('You cut down the tree, gaining 1 log and 10 fitness xp.');
+        setTree(false);
+        props.onCutTree();
       } else {
         props.addToFeed('You need an axe to do that.')
       }
@@ -223,7 +248,7 @@ const Quadrant2 = (props) => {
       <h3 className='quad-header'>Quadrant 2: The Plains</h3>
       <Player x={position.x} y={position.y} />
       <FarmPatch farm={() => farmItems()} />
-      <Tree cutTree={() => cutTree()} />
+      <Tree cutTree={() => cutTree()} cut={!tree}/>
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )
