@@ -169,6 +169,11 @@ const StorePage = (props) => {
                 item={'hammer'}
                 value={15}
               />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={'acetaminophen'}
+                value={25}
+              />
               </div>
             : 
               <div className='bank-items-screen'>
