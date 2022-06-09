@@ -102,7 +102,12 @@ function App() {
                 <HomePage 
                   user={user} 
                   userRef={firestore.collection('users').doc(user.uid)}
-                  itemsRef = {firestore.collection('items')}  
+                  itemsRef = {firestore.collection('items')} 
+                  eraseStartCoords={() => setStartCoords({
+                    quad: 0,
+                    x: 0,
+                    y: 0,
+                  })}
                 />}
             />
             <Route

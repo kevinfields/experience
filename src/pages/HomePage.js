@@ -19,6 +19,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     loadUserData();
+    props.eraseStartCoords();
   }, [])
 
 

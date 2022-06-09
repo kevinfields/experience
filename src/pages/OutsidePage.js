@@ -11,7 +11,6 @@ const OutsidePage = (props) => {
   const [quadrant, setQuadrant] = useState(1);
   const [startCoord, setStartCoord] = useState(20);
   const [axis, setAxis] = useState('y');
-  const [exactStart, setExactStart] = useState(false);
   const [exactCoords, setExactCoords] = useState({
     x: 0,
     y: 0,
@@ -23,7 +22,11 @@ const OutsidePage = (props) => {
  
     setQuadrant(quad);
     setStartCoord(start);
-    setAxis(axis)
+    setAxis(axis);
+    setExactCoords({
+      x: 0,
+      y: 0,
+    })
   }
 
   const feedUpdater = (text) => {
@@ -45,7 +48,6 @@ const OutsidePage = (props) => {
   useEffect(() => {
     if (props.startCoords.quad !== 0) {
       setQuadrant(props.startCoords.quad);
-      setExactStart(true);
       setExactCoords({
         x: props.startCoords.x,
         y: props.startCoords.y,
