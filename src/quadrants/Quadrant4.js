@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Player from '../components/Player';
+import Neighborhood from '../game-objects/Neighborhood';
 import Store from '../game-objects/Store';
+import ADD_XP from '../reducers/ADD_XP';
+import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import '../styling/Quadrant4.css';
 
 const Quadrant4 = (props) => {
@@ -94,11 +97,43 @@ const Quadrant4 = (props) => {
     }
   }
 
+  const repairNeighborhood = async () => {
+
+    let hammer = false;
+    let nails = false;
+    let logs = false;
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc =>{
+        if (doc.id === 'hammer'){
+          hammer = true;
+        }
+        if (doc.id === 'nails'){
+          nails = true;
+        }
+        if (doc.id === 'logs'){
+          logs = true;
+        }
+      })
+    })
+    if (hammer && nails && logs) {
+      await REMOVE_ITEM(props.userRef, 'nails', 1);
+      await REMOVE_ITEM(props.userRef, 'logs', 1);
+      await ADD_XP(props.userRef, 'construction', '20');
+      props.addToFeed('You use a hammer, nails, and logs to make repairs.');
+      props.addToFeed('You get 20 construction xp.')
+    } else {
+      props.addToFeed("You need a hammer, nails, and logs to do that.");
+    }
+  }
+
+
   return (
     <div className='quad-4' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 4: The City</h3>
       <Player x={position.x} y={position.y} />
       <Store onEnter={() => enterStore()} />
+      <Neighborhood onRepair={() => repairNeighborhood()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

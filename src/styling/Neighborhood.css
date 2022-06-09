@@ -1,0 +1,10 @@
+.neighborhood {
+  position: fixed;
+  left: 70vw;
+  bottom: 70vh;
+  width: 10vw;
+  height: 10vh;
+  border: 1px solid tan;
+  background-color: sienna;
+  color: yellow;
+}
