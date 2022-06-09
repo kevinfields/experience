@@ -88,7 +88,7 @@ const StorePage = (props) => {
 
     const price = itemObj.value / itemObj.amount;
     console.log('price: ' + price);
-    await REMOVE_ITEM(props.userRef, itemObj, amount).then(res => {
+    await REMOVE_ITEM(props.userRef, itemObj.item, amount).then(res => {
       if (res === 'success') {
         ADD_COINS(props.userRef, Number(price));
         setCoins(Number(coins) + Number(price))
@@ -153,6 +153,11 @@ const StorePage = (props) => {
                 buyItem={(obj) => buyItem(obj)}
                 item={'axe'}
                 value={40}
+              />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={'bread_dough'}
+                value={5}
               />
               </div>
             : 

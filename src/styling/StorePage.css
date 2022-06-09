@@ -42,6 +42,7 @@
   top: 21vh;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 1vw;
   padding: 1vw;
@@ -56,6 +57,7 @@
   top: 21vh;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: 1vw;
   padding: 1vw;

@@ -3,6 +3,7 @@ import Player from '../components/Player';
 import FarmPatch from '../game-objects/FarmPatch';
 import Tree from '../game-objects/Tree';
 import ADD_XP from '../reducers/ADD_XP';
+import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
 import '../styling/Quadrant2.css';
 
@@ -156,14 +157,7 @@ const Quadrant2 = (props) => {
         })
       })
       if (carrotSeeds.any) {
-        if (carrotSeeds.amount > 1) {
-          await props.itemsRef.doc('carrot_seed').set({
-            amount: carrotSeeds.amount - 1,
-            value: (carrotSeeds.amount - 1) * 2,
-          })
-        } else {
-          await props.itemsRef.doc('carrot_seed').delete();
-        }
+        await REMOVE_ITEM(props.userRef, "carrot_seed", 1);
         await props.featuresRef.doc('farm_patch').set({
           currentlyFarming: true,
           startTime: new Date(),

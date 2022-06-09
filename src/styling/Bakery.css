@@ -1,0 +1,10 @@
+.bakery {
+  position: fixed;
+  left: 40vw;
+  bottom: 60vh;
+  width: 10vw;
+  height: 10vh;
+  border: 1px solid red;
+  background-color: brown;
+  color: yellow;
+}

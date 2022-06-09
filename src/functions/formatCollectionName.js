@@ -7,5 +7,7 @@ export default function formatCollectionName(name) {
       nameArr[i] = ' ';
     }
   }
+
+  nameArr[0] = nameArr[0].toUpperCase();
   return nameArr.join('');
 }

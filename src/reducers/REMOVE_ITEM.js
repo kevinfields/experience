@@ -1,30 +1,31 @@
-export default async function REMOVE_ITEM(userRef, itemObject, number) {
+export default async function REMOVE_ITEM(userRef, item, number) {
 
-  let userItemValue = itemObject.amount;
+  let userItemValue;
   let totalValue;
   let singleValue;
 
-  await userRef.collection('items').doc(itemObject.item).get().then(doc => {
+  await userRef.collection('items').doc(item).get().then(doc => {
     totalValue = doc.data().value;
-    singleValue = (totalValue / userItemValue)
+    userItemValue = doc.data().amount;
+    singleValue = (totalValue / userItemValue);
   })
 
 
   let newAmount = userItemValue - number;
-
+  console.log(`New Amount: ${newAmount}`)
   if (newAmount < 0) {
     return ('You do not own that many of this item.');
   }
 
   if (newAmount > 0) {
-    userRef.collection('items').doc(itemObject.item).set({
+    userRef.collection('items').doc(item).set({
       amount: newAmount,
       value: (singleValue * newAmount),
     })
   }
 
   if (newAmount === 0) {
-    userRef.collection('items').doc(itemObject.item).delete();
+    userRef.collection('items').doc(item).delete();
   }
   return 'success';
 }
