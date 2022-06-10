@@ -1,4 +1,6 @@
-export default async function ADD_XP(userRef, skill, amount) {
+import checkLevelUp from "../functions/checkLevelUp";
+
+export default async function ADD_XP(userRef, skill, amount, levelUpFn) {
 
   let currentXp;
   let generalData;
@@ -28,10 +30,17 @@ export default async function ADD_XP(userRef, skill, amount) {
         });
         break;
       case 'fitness':
+
+        
         currentXp = doc.data().fitnessXp;
+        let fitnessLevelUp = checkLevelUp(currentXp, amount);
+        if (fitnessLevelUp) {
+          levelUpFn();
+        }
         userRef.set({
           ...generalData,
           fitnessXp: Number(currentXp) + Number(amount),
+          currentEnergy: fitnessLevelUp ? (Number(generalData.currentEnergy + 1)) : generalData.currentEnergy
         });
         break;
       case 'farming':
@@ -49,10 +58,17 @@ export default async function ADD_XP(userRef, skill, amount) {
         });
         break;
       case 'medicine':
+        
         currentXp = doc.data().medicineXp;
+        let medicineLevelUp = checkLevelUp(currentXp, amount);
+        console.log('medicineLevelUp: ' + medicineLevelUp ? 'true' : 'false');
+        if (medicineLevelUp) {
+          levelUpFn();
+        }
         userRef.set({
           ...generalData,
           medicineXp: Number(currentXp) + Number(amount),
+          currentHealth: medicineLevelUp ? (Number(generalData.currentHealth) + 1) : Number(generalData.currentHealth),
         });
         break;
       default:

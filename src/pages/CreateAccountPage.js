@@ -61,6 +61,8 @@ const CreateAccountPage = (props) => {
         farmingXp: 0,
         huntingXp: 0,
         medicineXp: 0,
+        currentHealth: 10,
+        currentEnergy: 10,
       });
       await props.usersRef.doc(props.user.uid).collection('items').doc('coins').set({
         amount: Number(100),

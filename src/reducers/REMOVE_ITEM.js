@@ -12,7 +12,6 @@ export default async function REMOVE_ITEM(userRef, item, number) {
 
 
   let newAmount = userItemValue - number;
-  console.log(`New Amount: ${newAmount}`)
   if (newAmount < 0) {
     return ('You do not own that many of this item.');
   }

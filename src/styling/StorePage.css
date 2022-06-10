@@ -96,3 +96,31 @@
   background-color: yellow;
   cursor: pointer;
 }
+
+.sell-half-button {
+  background-color: transparent;
+  border-radius: 5px;
+  width: 9.4vw;
+  height: 3vh;
+  border-color: red;
+  color: red;
+}
+
+.sell-half-button:hover {
+  background-color: orange;
+  cursor: pointer;
+}
+
+.sell-all-button {
+  background-color: transparent;
+  border-radius: 5px;
+  width: 9.4vw;
+  height: 3vh;
+  border-color: purple;
+  color: purple;
+}
+
+.sell-all-button:hover {
+  background-color: hotpink;
+  cursor: pointer;
+}

@@ -86,12 +86,17 @@ const StorePage = (props) => {
 
   const sellItem = async (itemObj, amount) => {
 
+    if (amount === itemObj.amount) {
+      if (!window.confirm('Are you sure you want to sell every one of this item?')) {
+        return;
+      }
+    }
+
     const price = itemObj.value / itemObj.amount;
-    console.log('price: ' + price);
     await REMOVE_ITEM(props.userRef, itemObj.item, amount).then(res => {
       if (res === 'success') {
-        ADD_COINS(props.userRef, Number(price));
-        setCoins(Number(coins) + Number(price))
+        ADD_COINS(props.userRef, Number(price * amount));
+        setCoins(Number(coins) + Number(price * amount))
       }
     });
     
@@ -174,6 +179,16 @@ const StorePage = (props) => {
                 item={'acetaminophen'}
                 value={25}
               />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={'lemon'}
+                value={5}
+              />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
+                item={"lemon_seed"}
+                value={3}
+              />
               </div>
             : 
               <div className='bank-items-screen'>
@@ -181,6 +196,8 @@ const StorePage = (props) => {
                   <div className='store-item'>
                     <Item item={formatCollectionName(item.item)} amount={item.amount} value={item.value} />
                     <button className='sell-item-button' onClick={() => sellItem(item, 1)}>Sell 1</button>
+                    <button className='sell-half-button' onClick={() => sellItem(item, Math.floor(item.amount / 2))}>Sell Half</button>
+                    <button className='sell-all-button' onClick={() => sellItem(item, item.amount)}>Sell All</button>
                   </div>
                 ))}
               </div>

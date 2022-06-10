@@ -1,0 +1,10 @@
+.chemistry-lab {
+  position: fixed;
+  left: 20vw;
+  bottom: 50vh;
+  width: 15vw;
+  height: 15vh;
+  border: 2px solid red;
+  background-color: pink;
+  color: blue;
+}

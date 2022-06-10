@@ -1,0 +1,10 @@
+.lemon-grove {
+  width: 15vw;
+  height: 15vh;
+  border: 2px solid green;
+  background-color: yellow;
+  color: green;
+  position: fixed;
+  left: 40vw;
+  bottom: 40vh;
+}

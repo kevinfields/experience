@@ -207,7 +207,7 @@ const Quadrant2 = (props) => {
           amount: 1,
           value: 5,
         });
-        await ADD_XP(props.userRef, 'fitness', 10);
+        await ADD_XP(props.userRef, 'fitness', 10, () => props.addFitnessLevel());
         await props.featuresRef.doc('tree').set({
           currentlyCut: true,
           cutTime: new Date(),

@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
+import xpToLevel from '../functions/xpToLevel';
 import Bakery from '../game-objects/Bakery';
+import LemonGrove from '../game-objects/LemonGrove';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
@@ -121,11 +123,76 @@ const Quadrant1 = (props) => {
     }
   }
 
+  const plantLemons = async () => {
+
+    let userData;
+    await props.userRef.get().then(doc => {
+      userData = doc.data();
+    });
+    if (xpToLevel(userData.farmingXp) < 11) {
+      props.addToFeed('You must have level 11 farming to do that.');
+      return;
+    }
+
+    let lemonSeed = false;
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'lemon_seed') {
+          lemonSeed = true;
+        }
+      })
+    })
+
+    if (lemonSeed) {
+
+      let currentGroveData;
+
+      await props.featuresRef.doc('lemon_grove').get().then(doc => {
+        currentGroveData = doc.data();
+      });
+
+      if (currentGroveData === undefined) {
+        currentGroveData = {
+          currentlyFarming: false,
+        }
+      }
+
+      if (currentGroveData.currentlyFarming) {
+        let time = new Date().getTime();
+        let startTime = currentGroveData.startTime.seconds * 1000;
+        if (time - startTime >= 100000) {
+          await TAKE_ITEM(props.userRef, {
+            item: 'lemon',
+            value: 5,
+            amount: 5,
+          })
+          await ADD_XP(props.userRef, 'farming', 50);
+          await props.featuresRef.doc('lemon_grove').set({
+            currentlyFarming: false,
+          })
+          props.addToFeed('You take 5 lemons, and gain 50 farming xp.');
+        } else {
+          props.addToFeed(`Your lemons will be done growing in ${Math.floor(100 - ((time - startTime) / 1000))} seconds.`)
+        }
+      } else {
+        await REMOVE_ITEM(props.userRef, 'lemon_seed', 1);
+        props.addToFeed('You plant a lemon seed');
+        await props.featuresRef.doc('lemon_grove').set({
+          currentlyFarming: true,
+          startTime: new Date(),
+        })
+      }
+    } else {
+      props.addToFeed('You need a lemon seed to do that.');
+    }
+  }
+
   return (
     <div className='quad-1' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 1: The Desert</h3>
       <Player x={position.x} y={position.y} />
       <Bakery bakeBread={() => bakeBread()} />
+      <LemonGrove plantLemons={() => plantLemons()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

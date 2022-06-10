@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Player from '../components/Player';
+import ChemistryLab from '../game-objects/ChemistryLab';
 import Neighborhood from '../game-objects/Neighborhood';
 import Store from '../game-objects/Store';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
+import TAKE_ITEM from '../reducers/TAKE_ITEM';
 import '../styling/Quadrant4.css';
 
 const Quadrant4 = (props) => {
@@ -127,6 +129,37 @@ const Quadrant4 = (props) => {
     }
   }
 
+  const makeMedicine = async () => {
+
+    let aceta = false;
+    let lemon = false;
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'lemon') {
+          lemon = true;
+        }
+        if (doc.id === 'acetaminophen') {
+          aceta = true;
+        }
+      })
+    })
+
+    if (aceta && lemon) {
+      await REMOVE_ITEM(props.userRef, 'acetaminophen', 1);
+      await REMOVE_ITEM(props.userRef, 'lemon', 1);
+      await TAKE_ITEM(props.userRef, {
+        item: 'basic_medicine',
+        amount: 1,
+        value: 15,
+      });
+      await ADD_XP(props.userRef, 'medicine', 10, () => props.addMedicineLevel());
+      props.addToFeed('You mix the lemons and acetaminophen, and make some medicine.');
+      props.addToFeed('You get 10 xp.');
+    } else {
+      props.addToFeed('You need a lemon and acetaminophen to do that.');
+    } 
+  };
+
 
   return (
     <div className='quad-4' onClick={() => dummy.current.focus()}>
@@ -134,6 +167,7 @@ const Quadrant4 = (props) => {
       <Player x={position.x} y={position.y} />
       <Store onEnter={() => enterStore()} />
       <Neighborhood onRepair={() => repairNeighborhood()} />
+      <ChemistryLab makeMedicine={() => makeMedicine()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

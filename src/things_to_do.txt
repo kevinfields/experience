@@ -1,0 +1,15 @@
+ideally I'd like to make it so every skill can be trained at 3 areas, 
+only one of which can be accessed at level 1, one of which can be accessed around level 10-12, 
+and the last at level 17-18.
+
+Things should connect as much as possible, like growing lemons with farming making it 
+easier to train early medicine, carrots from farming and meat from hunting should work with
+cooking, logs from fitness (chopping wood) allow for construction, hunting could also give items
+for crafting, cooking could give items for medicine, and medicine could give items for fitness.
+
+Items gained from a 10-12 tier activity should be useful for any tier, but items
+from a level 1 tier should only be possibly useful for other tier 1 and tier 10-12 activities.
+Tier 17-18 should probably avoid giving items for tier 1 activities, but can give for 
+tier 10-12. The loop should be circular, a major todo is going to be figuring out how to connect 
+items so all skill training is balanced.
+

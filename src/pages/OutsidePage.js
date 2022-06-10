@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
+import CurrentStatScreen from '../components/CurrentStatScreen';
 import GameFeed from '../components/GameFeed';
+import xpToLevel from '../functions/xpToLevel';
 import Quadrant1 from '../quadrants/Quadrant1';
 import Quadrant2 from '../quadrants/Quadrant2';
 import Quadrant3 from '../quadrants/Quadrant3';
@@ -11,6 +13,12 @@ const OutsidePage = (props) => {
   const [quadrant, setQuadrant] = useState(1);
   const [startCoord, setStartCoord] = useState(20);
   const [axis, setAxis] = useState('y');
+  const [current, setCurrent] = useState({
+    maxHealth: 10,
+    currentHealth: 0,
+    maxEnergy: 10,
+    currentEnergy: 0,
+  })
   const [exactCoords, setExactCoords] = useState({
     x: 0,
     y: 0,
@@ -45,6 +53,37 @@ const OutsidePage = (props) => {
     }, 100000)
   }
 
+  const addMedicineLevel = () => {
+    setCurrent({
+      ...current,
+      maxHealth: current.maxHealth + 1,
+      currentHealth: current.currentHealth + 1.
+    })
+  };
+
+  const addFitnessLevel = () => {
+    setCurrent({
+      ...current,
+      maxEnergy: current.maxEnergy + 1,
+      currentEnergy: current.maxEnergy + 1,
+    })
+  };
+
+  const loadUserCurrents = async () => {
+
+    let data;
+
+    await props.userRef.get().then(doc => {
+      data = doc.data();
+    })
+    setCurrent({
+      maxHealth: xpToLevel(data.medicineXp) + 10,
+      maxEnergy: xpToLevel(data.fitnessXp) + 10,
+      currentHealth: data.currentHealth,
+      currentEnergy: data.currentEnergy,
+    })
+  }
+
   useEffect(() => {
     if (props.startCoords.quad !== 0) {
       setQuadrant(props.startCoords.quad);
@@ -53,6 +92,7 @@ const OutsidePage = (props) => {
         y: props.startCoords.y,
       })
     }
+    loadUserCurrents();
   }, [])
 
   return (
@@ -79,6 +119,7 @@ const OutsidePage = (props) => {
           addToFeed={(text) => feedUpdater(text)}
           onCutTree={() => regrowTree()}
           regrown={regrownTree}
+          addFitnessLevel={() => addFitnessLevel()}
         />
         : quadrant === 3 ? 
         <Quadrant3
@@ -104,9 +145,16 @@ const OutsidePage = (props) => {
             x: 50,
             y: 58,
           })}
+          addMedicineLevel={() => addMedicineLevel()}
         />
       }
       <GameFeed items={feed} />
+      <CurrentStatScreen 
+        maxHealth={current.maxHealth} 
+        maxEnergy={current.maxEnergy} 
+        currentHealth={current.currentHealth} 
+        currentEnergy={current.currentEnergy}
+      />
     </div>
   )
 }
