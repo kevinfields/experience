@@ -16,7 +16,7 @@ const Quadrant2 = (props) => {
   });
   const [bird, setBird] = useState({
     x: 20,
-    y: 20,
+    y: 80,
     active: true,
   })
   const [birdTimeoutId, setBirdTimeoutId] = useState('');
@@ -307,13 +307,6 @@ const Quadrant2 = (props) => {
           y: 0,
           active: false,
         })
-        setBirdTimeoutId(setTimeout(() => {
-          setBird({
-            active: true,
-            x: 20,
-            y: 20,
-          })
-        }, 50000))
       } else {
         let remainder = 50 - ((currentTime - lastCatchTime)/ 1000);
         props.addToFeed(`You can hunt again in ${Math.floor(remainder)} seconds.`)
@@ -330,7 +323,7 @@ const Quadrant2 = (props) => {
           setBird({
             ...bird,
             x: bird.x + 1,
-            y: bird.y + 1,
+            y: bird.y - 1,
           })
         }, 1000))
       } else {
@@ -338,7 +331,7 @@ const Quadrant2 = (props) => {
           setBird({
             ...bird,
             x: 20,
-            y: 20,
+            y: 80,
           })
         }, 1000))
       }
