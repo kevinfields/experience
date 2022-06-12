@@ -1,0 +1,7 @@
+.bird {
+  width: 2vw;
+  height: 2vh;
+  border: 1px solid red;
+  background-color: white;
+  color: red;
+}

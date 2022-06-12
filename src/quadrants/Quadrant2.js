@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
+import Bird from '../game-objects/Bird';
 import FarmPatch from '../game-objects/FarmPatch';
 import Tree from '../game-objects/Tree';
 import ADD_XP from '../reducers/ADD_XP';
@@ -13,6 +14,12 @@ const Quadrant2 = (props) => {
     x: props.startX,
     y: props.startY,
   });
+  const [bird, setBird] = useState({
+    x: 20,
+    y: 20,
+    active: true,
+  })
+  const [birdTimeoutId, setBirdTimeoutId] = useState('');
   const [move, setMove] = useState('');
   const [tree, setTree] = useState(false);
 
@@ -236,11 +243,114 @@ const Quadrant2 = (props) => {
     }
   }
 
+  const huntBird = async () => {
+
+    let arrows = false;
+    let bow = false;
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'arrows') {
+          arrows = true;
+        }
+        if (doc.id === 'hunting_bow') {
+          bow = true;
+        }
+      })
+    })
+
+    if (!arrows || !bow) {
+      props.addToFeed('You need a hunting bow and an arrow to catch that.');
+      return;
+    }
+    
+
+    let birdData;
+    let timestamp = new Date();
+
+    await props.featuresRef.doc('bird').get().then(doc => {
+      birdData = doc.data();
+    })
+
+    if (birdData === undefined) {
+      await props.featuresRef.doc('bird').set({
+        currentlyHunted: true,
+        lastCatchDate: timestamp,
+      })
+      props.addToFeed('You use one arrow, and gain feathers, bird meat, and 40 hunting xp.');
+    } else {
+
+      let currentTime = timestamp.getTime();
+      let lastCatchTime = birdData.lastCatchDate.seconds * 1000;
+
+      if (currentTime - lastCatchTime >= 50000) {
+        await props.featuresRef.doc('bird').set({
+          currentlyHunted: true,
+          lastCatchDate: timestamp,
+        });
+        await REMOVE_ITEM(props.userRef, 'arrows', 1);
+        await TAKE_ITEM(props.userRef, {
+          item: 'bird_meat',
+          amount: 1,
+          value: 10,
+        });
+        await TAKE_ITEM(props.userRef, {
+          item: 'feathers',
+          amount: 10,
+          value: 2,
+        });
+        await ADD_XP(props.userRef, 'hunting', 40);
+        props.addToFeed('You use one arrow, and gain feathers, bird meat, and 40 hunting xp.');
+        clearTimeout(birdTimeoutId);
+        setBird({
+          x: 0,
+          y: 0,
+          active: false,
+        })
+        setBirdTimeoutId(setTimeout(() => {
+          setBird({
+            active: true,
+            x: 20,
+            y: 20,
+          })
+        }, 50000))
+      } else {
+        let remainder = 50 - ((currentTime - lastCatchTime)/ 1000);
+        props.addToFeed(`You can hunt again in ${Math.floor(remainder)} seconds.`)
+      }
+    }
+  }
+
+
+  useEffect(() => {
+
+    if (bird.active) {
+      if (bird.x < 80) {
+        setBirdTimeoutId(setTimeout(() => {
+          setBird({
+            ...bird,
+            x: bird.x + 1,
+            y: bird.y + 1,
+          })
+        }, 1000))
+      } else {
+        setBirdTimeoutId(setTimeout(() => {
+          setBird({
+            ...bird,
+            x: 20,
+            y: 20,
+          })
+        }, 1000))
+      }
+    }
+  }, [bird])
+
 
   return (
     <div className='quad-2' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 2: The Plains</h3>
       <Player x={position.x} y={position.y} />
+      {bird.active ? <Bird x={bird.x} y={bird.y} huntBird={() => huntBird()}/> : null} 
       <FarmPatch farm={() => farmItems()} />
       <Tree cutTree={() => cutTree()} cut={!tree}/>
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>

@@ -153,8 +153,7 @@ const Quadrant4 = (props) => {
         value: 15,
       });
       await ADD_XP(props.userRef, 'medicine', 10, () => props.addMedicineLevel());
-      props.addToFeed('You mix the lemons and acetaminophen, and make some medicine.');
-      props.addToFeed('You get 10 xp.');
+      props.addToFeed('You make some medicine, and get 10 xp.'); 
     } else {
       props.addToFeed('You need a lemon and acetaminophen to do that.');
     } 

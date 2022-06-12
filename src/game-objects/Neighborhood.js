@@ -3,7 +3,7 @@ import '../styling/Neighborhood.css';
 
 const Neighborhood = (props) => {
   return (
-    <div className='neighborhood' onClick={() => props.onRepair()}>Neighborhood</div>
+    <div className='neighborhood' onClick={() => props.onRepair()}>Neighborhood {"(construction level 1)"}</div>
   )
 }
 
