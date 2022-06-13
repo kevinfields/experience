@@ -2,6 +2,7 @@ import { reauthenticateWithCredential } from 'firebase/auth';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Player from '../components/Player';
+import CarpentryHut from '../game-objects/CarpentryHut';
 import ChemistryLab from '../game-objects/ChemistryLab';
 import Neighborhood from '../game-objects/Neighborhood';
 import Store from '../game-objects/Store';
@@ -170,6 +171,54 @@ const Quadrant4 = (props) => {
     } 
   };
 
+  const makeUpgrade = async () => {
+    
+    let level = false;
+    let nails = false;
+    let hammer = false;
+    let logs = false;
+
+    await props.userRef.get().then(doc => {
+      if (doc.data().craftingXp >= 1393) {
+        level = true
+      }
+    });
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'logs') {
+          logs = true;
+        }
+        if (doc.id === 'hammer') {
+          hammer = true;
+        }
+        if (doc.id === 'nails') {
+          nails = true;
+        }
+      })
+    });
+
+    if (!level) {
+      props.addToFeed('You need a crafting level of at least 12 to do that.');
+      return;
+    }
+
+    if (!logs || !hammer || !nails) {
+      props.addToFeed('You need logs, a hammer, and nails to do that.');
+      return;
+    }
+
+    await TAKE_ITEM(props.userRef, {
+      item: 'house_upgrade',
+      value: 50,
+      amount: 1,
+    })
+    await REMOVE_ITEM(props.userRef, 'logs', 1);
+    await REMOVE_ITEM(props.userRef, 'nails', 1);
+    await ADD_XP(props.userRef, 'crafting', 100);
+    props.addToFeed('You use a nail and some logs to make a house upgrade kit, gaining 100 crafting xp.');
+  }
+
 
   return (
     <div className='quad-4' onClick={() => dummy.current.focus()}>
@@ -178,6 +227,7 @@ const Quadrant4 = (props) => {
       <Store onEnter={() => enterStore()} />
       <Neighborhood onRepair={() => repairNeighborhood()} />
       <ChemistryLab makeMedicine={() => makeMedicine()} />
+      <CarpentryHut makeUpgrade={() => makeUpgrade()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

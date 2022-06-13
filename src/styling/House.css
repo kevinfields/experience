@@ -1,0 +1,10 @@
+.house {
+  position: fixed;
+  left: 25vw;
+  bottom: 70vh;
+  width: 10vw;
+  height: 10vh;
+  border: 1px solid brown;
+  background-color: pink;
+  color: red;
+}

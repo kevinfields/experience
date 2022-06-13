@@ -13,3 +13,13 @@ Tier 17-18 should probably avoid giving items for tier 1 activities, but can giv
 tier 10-12. The loop should be circular, a major todo is going to be figuring out how to connect 
 items so all skill training is balanced.
 
+TIER      1             2               3
+
+SKILL 
+cooking   bakeryX       bird roastX     fish fryX
+crafting  fletch hutX   furniture hut   tool hut
+const.    neighborhoodX house           palace
+farming   carrotsX      lemonsX         tea leaves
+fitness   treeX         swimming        boxing (palace)
+hunting   birdX         fishX           bear 
+medicine  basicX        advanced        potions

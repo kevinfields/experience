@@ -6,6 +6,7 @@
   height: 5vh;
   border: 1px solid saddlebrown;
   background-color: saddlebrown;
+  text-align: center;
 }
 
 .tree-cut {
@@ -16,4 +17,5 @@
   height: 5vh;
   border: 1px solid saddlebrown;
   background-color: green;
+  text-align: center;
 }

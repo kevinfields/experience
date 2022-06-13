@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import Fish from '../game-objects/Fish';
+import House from '../game-objects/House';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
@@ -208,11 +209,65 @@ const Quadrant3 = (props) => {
     }
   }, [fish])
 
+  const upgradeHouse = async () => {
+
+    let upgrade = false;
+    let level = false;
+
+    await props.userRef.get().then(doc => {
+      level = doc.data().constructionXp >= 750;
+    })
+
+    if (!level) {
+      props.addToFeed('You need at least level 10 construction to do that.');
+      return;
+    }
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'house_upgrade') {
+          upgrade = true;
+        }
+      })
+    });
+
+    if (!upgrade) {
+      props.addToFeed('You need a house upgrade kit to do that.');
+      return;
+    }
+    let houseData;
+    await props.featuresRef.doc('house').get().then(doc => {
+      houseData = doc.data();
+    })
+
+    if (houseData === undefined) {
+      await props.featuresRef.doc('house').set({
+        upgrades: 1,
+      })
+      await ADD_XP(props.userRef, 'construction', 97);
+      await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
+      props.addToFeed('You upgrade your house, gaining 97 construction xp.');
+    } else {
+      if (houseData.upgrades >= 35) {
+        props.addToFeed('Your house is already fully upgraded.');
+        return;
+      } else {
+        await props.featuresRef.doc('house').set({
+          upgrades: Number(houseData.upgrades) + 1,
+        })
+        await ADD_XP(props.userRef, 'construction', 97);
+        await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
+        props.addToFeed('You upgrade your house, gaining 97 construction xp.');
+      }
+    }
+  }
+
   return (
     <div className='quad-3' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 3: The Ocean</h3>
       <Player x={position.x} y={position.y} />
-      {fish.active ? <Fish x={fish.x} y={fish.y} onFlyFish={() => flyFish()} /> : null} 
+      {fish.active ? <Fish x={fish.x} y={fish.y} onFlyFish={() => flyFish()} /> : null}
+      <House upgradeHouse={() => upgradeHouse()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

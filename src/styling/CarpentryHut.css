@@ -1,0 +1,10 @@
+.carpentry-hut {
+  position: fixed;
+  left: 70vw;
+  bottom: 30vh;
+  width: 10vw;
+  height: 10vw;
+  border: 1px solid blue;
+  background-color: tan;
+  color: blue;
+}

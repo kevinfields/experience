@@ -38,7 +38,7 @@ const Quadrant2 = (props) => {
       } else {
         setTimeout(() => {
           setTree(true);
-        }, elapsed)
+        }, 100000 - elapsed)
       }
     })
     
@@ -193,6 +193,11 @@ const Quadrant2 = (props) => {
       treeData = doc.data();
     });
 
+    let userData;
+    await props.userRef.get().then(doc => {
+      userData = doc.data();
+    })
+
     if (treeData === undefined) {
       props.featuresRef.doc('tree').set({
         currentlyCut: false,
@@ -213,9 +218,14 @@ const Quadrant2 = (props) => {
         })
       })
       if (axe) {
+
+        let amount = 1;
+        if (userData.fitnessXp >= 750) {
+          amount = 2;
+        }
         await TAKE_ITEM(props.userRef, {
           item: 'logs',
-          amount: 1,
+          amount: amount,
           value: 5,
         });
         await ADD_XP(props.userRef, 'fitness', 10, () => props.addFitnessLevel());
@@ -223,7 +233,7 @@ const Quadrant2 = (props) => {
           currentlyCut: true,
           cutTime: new Date(),
         });
-        props.addToFeed('You cut down the tree, gaining 1 log and 10 fitness xp.');
+        props.addToFeed(`You cut down the tree, gaining ${amount} log${amount > 1 ? 's' : ''} and 10 fitness xp.`);
         setTree(false);
         props.onCutTree();
       } else {
