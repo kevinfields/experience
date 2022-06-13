@@ -59,13 +59,14 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
+  overflow-y: scroll;
   gap: 1vw;
   padding: 1vw;
 }
 
 .store-item {
   width: 9vw;
-  height: 9vw;
+  height: 15vw;
 }
 
 .buy-item-button {

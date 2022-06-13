@@ -31,11 +31,14 @@ const Quadrant2 = (props) => {
     let currentTime = new Date().getTime();
     await props.featuresRef.doc('tree').get().then(doc => {
       let lastCutTime = doc.data().cutTime.seconds * 1000;
-      console.log('currentTime: ' + currentTime);
-      console.log('lastCutTime: ' + lastCutTime);
-      console.log('difference: ' + (currentTime - lastCutTime))
-      if (currentTime - lastCutTime > 100000) {
+      let elapsed = currentTime - lastCutTime;
+      console.log('elapsed: ' + elapsed)
+      if (elapsed > 100000) {
         setTree(true);
+      } else {
+        setTimeout(() => {
+          setTree(true);
+        }, elapsed)
       }
     })
     
@@ -352,6 +355,11 @@ const Quadrant2 = (props) => {
   }, [bird])
 
   const cookBird = async () => {
+
+    if (position.y < 24 || position.y > 49 || position.x > 79 || position.x < 65) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
     let birdMeat = false;
     let level = false;
 

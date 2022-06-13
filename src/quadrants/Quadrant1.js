@@ -93,6 +93,7 @@ const Quadrant1 = (props) => {
     }
 
     let dough = false;
+    let pan = false;
     let count = 0;
     await props.itemsRef.get().then(snap => {
       snap.forEach(doc => {
@@ -100,10 +101,13 @@ const Quadrant1 = (props) => {
           dough = true;
           count = doc.data().amount;
         }
+        if (doc.id === 'cooking_pan') {
+          pan = true;
+        }
       })
     })
 
-    if (dough) {
+    if (dough && pan) {
 
       if (count > 1) {
         await REMOVE_ITEM(props.userRef, 'bread_dough', 1);
@@ -120,11 +124,16 @@ const Quadrant1 = (props) => {
       props.addToFeed('You bake the bread dough.');
       props.addToFeed('You get a piece of bread and 10 cooking xp.');
     } else {
-      props.addToFeed('You need bread dough to do that.');
+      props.addToFeed('You need bread dough and a cooking pan to do that.');
     }
   }
 
   const plantLemons = async () => {
+
+    if (position.y > 57 || position.y < 34 || position.x < 35 || position.x > 57 ) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
 
     let userData;
     await props.userRef.get().then(doc => {
@@ -189,6 +198,11 @@ const Quadrant1 = (props) => {
   }
 
   const fletchArrows = async () => {
+
+    if (position.y > 82 || position.y < 64 || position.x > 31) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
     let logs = false;
     let feathers = false;
 

@@ -1,3 +1,4 @@
+import { reauthenticateWithCredential } from 'firebase/auth';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Player from '../components/Player';
@@ -101,6 +102,11 @@ const Quadrant4 = (props) => {
 
   const repairNeighborhood = async () => {
 
+    if (position.y < 63 || position.y > 82 || position.x < 65 || position.x > 81) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
+
     let hammer = false;
     let nails = false;
     let logs = false;
@@ -130,6 +136,11 @@ const Quadrant4 = (props) => {
   }
 
   const makeMedicine = async () => {
+
+    if (position.x > 36 || position.y > 67 || position.y < 43) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
 
     let aceta = false;
     let lemon = false;
