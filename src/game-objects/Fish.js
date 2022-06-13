@@ -7,7 +7,7 @@ const Fish = (props) => {
       position: 'fixed',
       left: `${props.x}vw`,
       bottom: `${props.y}vh`,
-    }} onClick={() => props.onFlyFish()}>Fish {"(hunting level 12)"}</div>
+    }} onClick={() => props.onFlyFish()}>Fish <div className='level-header'>{"(hunting level 12)"}</div></div>
   )
 }
 

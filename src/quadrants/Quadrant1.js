@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import xpToLevel from '../functions/xpToLevel';
 import Bakery from '../game-objects/Bakery';
+import FishFry from '../game-objects/FishFry';
 import FletchingHut from '../game-objects/FletchingHut';
 import LemonGrove from '../game-objects/LemonGrove';
 import ADD_XP from '../reducers/ADD_XP';
@@ -234,6 +235,48 @@ const Quadrant1 = (props) => {
     }
   }
 
+  const fryFish = async () => {
+
+    if (position.y < 19 || position.y > 35 || position.x < 65 || position.x > 79) {
+      props.addToFeed('You are too far away from that.');
+      return;
+    }
+    let fish = false;
+    let level = false;
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'fish') {
+          fish = true;
+        }
+      })
+    })
+
+    if (!fish) {
+      props.addToFeed('You need a fish to do that.');
+      return;
+    }
+    
+    await props.userRef.get().then(doc => {
+      level = doc.data().cookingXp >= 9035;
+    })
+
+    if (!level) {
+      props.addToFeed("You need a cooking level of 17 to do that.");
+      return;
+    }
+
+    await TAKE_ITEM(props.userRef, {
+      item: 'fried_fish',
+      value: 35,
+      amount: 2,
+    });
+    await REMOVE_ITEM(props.userRef, 'fish', 1);
+    await ADD_XP(props.userRef, 'cooking', 150);
+    props.addToFeed('You fry the fish into two smaller fried fish, gaining 150 cooking xp.');
+
+  }
+
 
   return (
     <div className='quad-1' onClick={() => dummy.current.focus()}>
@@ -242,6 +285,7 @@ const Quadrant1 = (props) => {
       <Bakery bakeBread={() => bakeBread()} />
       <LemonGrove plantLemons={() => plantLemons()} />
       <FletchingHut onFletch={() => fletchArrows()} />
+      <FishFry fryFish={() => fryFish()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

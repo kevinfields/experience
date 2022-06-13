@@ -1,0 +1,10 @@
+.fish-fry {
+  position: fixed;
+  left: 70vw;
+  bottom: 25vh;
+  width: 8vw;
+  height: 8vh;
+  border: 1px solid blue;
+  background-color: orange;
+  color: blue;
+}

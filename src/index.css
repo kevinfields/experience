@@ -60,3 +60,7 @@ html {
 .link:hover {
   background-color: red;
 }
+
+.level-header {
+  font-size: 7pt;
+}

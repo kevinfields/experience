@@ -128,14 +128,38 @@ const Quadrant3 = (props) => {
     })
 
     if (fishData === undefined) {
-      await props.featuresRef.set({
+      await props.featuresRef.doc('fish').set({
         currentlyCaught: true,
         lastCatchTime: currentTime,
-      })
+      });
+      await TAKE_ITEM(props.userRef, {
+        item: 'fish',
+        amount: 1,
+        value: 10,
+      });
+      await REMOVE_ITEM(props.userRef, 'feathers', 1);
+      await ADD_XP(props.userRef, 'hunting', 80);
+      await props.featuresRef.doc('fish').set({
+        currentlyCaught: true,
+        lastCatchTime: currentTime,
+      });
+      props.addToFeed('You use a feather and catch a fish, gaining 80 hunting xp.');
+        setFish({
+          ...fish,
+          active: false,
+        })
+        setTimeout(() => {
+          setFish({
+            x: 80,
+            y: 80,
+            active: true,
+          })
+        }, 50000)
     } else {
-      if (fishData.currentlyCaught) {
-        let remainder = Math.floor(50 - (currentTime.getTime() - fishData.lastCatchTime * 1000));
-        props.addToFeed(`You can fish again in ${remainder} seconds`);
+      let elapsed = Math.floor((currentTime.getTime() - (fishData.lastCatchTime.seconds * 1000)) / 1000);
+
+      if (elapsed <= 50) {
+        props.addToFeed(`You can fish again in ${50 - elapsed} seconds`);
       } else {
         await TAKE_ITEM(props.userRef, {
           item: 'fish',
@@ -148,7 +172,7 @@ const Quadrant3 = (props) => {
           currentlyCaught: true,
           lastCatchTime: currentTime,
         });
-        props.addToFeed('You use a feather and cathc a fish, gaining 80 hunting xp.');
+        props.addToFeed('You use a feather and catch a fish, gaining 80 hunting xp.');
         setFish({
           ...fish,
           active: false,
