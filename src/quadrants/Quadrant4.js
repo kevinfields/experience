@@ -1,4 +1,3 @@
-import { reauthenticateWithCredential } from 'firebase/auth';
 import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Player from '../components/Player';

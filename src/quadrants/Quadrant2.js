@@ -3,6 +3,7 @@ import Player from '../components/Player';
 import Bird from '../game-objects/Bird';
 import BirdRoaster from '../game-objects/BirdRoaster';
 import FarmPatch from '../game-objects/FarmPatch';
+import TeaLeafFarm from '../game-objects/TeaLeafFarm';
 import Tree from '../game-objects/Tree';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
@@ -405,6 +406,69 @@ const Quadrant2 = (props) => {
     props.addToFeed('You cook the bird meat, gaining a cooked bird and 50 cooking xp.');
   }
 
+  const harvestTeaLeaves = async () => {
+
+    let level = false;
+    let seeds = false;
+    const timestamp = new Date();
+    let farmData;
+
+    await props.userRef.get().then(doc => {
+      level = doc.data().farmingXp >= 4145;
+    })
+
+    if (!level) {
+      props.addToFeed('You need a farming level of at least 15 to do that.');
+      return;
+    }
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'tea_seed'){
+          seeds = true;
+        }
+      })
+    });
+
+    if (!seeds) {
+      props.addToFeed('You need a tea seed to do that.');
+      return;
+    }
+
+    await props.featuresRef.doc('tea_farm').get().then(doc => {
+      farmData = doc.data();
+    })
+
+    if (farmData === undefined) {
+      await props.featuresRef.doc('tea_farm').set({
+        lastFarmDate: timestamp,
+      });
+      await TAKE_ITEM(props.userRef, {
+        item: 'tea_leaf',
+        amount: 3,
+        value: 15,
+      });
+      await ADD_XP(props.userRef, 'farming', 150);
+      props.addToFeed('You get 3 tea leaves and 150 farming xp.');
+    } else {
+      let elapsed = (timestamp.getTime() - (farmData.lastFarmDate.seconds * 1000));
+
+      if (elapsed >= 100000) {
+        props.featuresRef.doc('tea_farm').set({
+          lastFarmDate: timestamp,
+        })
+        await TAKE_ITEM(props.userRef, {
+          item: 'tea_leaf',
+          amount: 3,
+          value: 15,
+        });
+        await ADD_XP(props.userRef, 'farming', 150);
+        props.addToFeed('You get 3 tea leaves and 150 farming xp.');
+      } else {
+        props.addToFeed(`Your tea leaves will be ready in ${Math.floor(elapsed / 1000)} seconds`);
+      }
+    }
+  }
 
   return (
     <div className='quad-2' onClick={() => dummy.current.focus()}>
@@ -414,6 +478,7 @@ const Quadrant2 = (props) => {
       <FarmPatch farm={() => farmItems()} />
       <Tree cutTree={() => cutTree()} cut={!tree}/>
       <BirdRoaster cookBird={() => cookBird()} />
+      <TeaLeafFarm harvestTeaLeaves={() => harvestTeaLeaves()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

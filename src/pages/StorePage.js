@@ -191,6 +191,11 @@ const StorePage = (props) => {
               />
               <StoreItem
                 buyItem={(obj) => buyItem(obj)}
+                item={'tea_seed'}
+                value={20}
+              />
+              <StoreItem
+                buyItem={(obj) => buyItem(obj)}
                 item={'fishing_pole'}
                 value={100}
               />
