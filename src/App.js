@@ -39,19 +39,21 @@ function App() {
   const navigate = useNavigate();
 
 
+  const [allow, setAllow] = useState(false);
+  
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user && allow) {
         navigate('/')
       } else {
         navigate('/login')
       }
     });
-  }, [user])
+  }, [user, allow])
   
 
 
-  const [allow, setAllow] = useState(false);
+  
   const [startCoords, setStartCoords] = useState({
     quad: 0,
     x: 0,
@@ -69,7 +71,7 @@ function App() {
         <>
           <Route
             exact
-            path="/"
+            path="/login"
             element={
               <LoginPage
                 nav={navigate}

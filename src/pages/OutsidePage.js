@@ -76,6 +76,7 @@ const OutsidePage = (props) => {
     await props.userRef.get().then(doc => {
       data = doc.data();
     })
+
     setCurrent({
       maxHealth: xpToLevel(data.medicineXp) + 10,
       maxEnergy: xpToLevel(data.fitnessXp) + 10,

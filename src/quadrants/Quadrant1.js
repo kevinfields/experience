@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import xpToLevel from '../functions/xpToLevel';
 import Bakery from '../game-objects/Bakery';
+import FletchingHut from '../game-objects/FletchingHut';
 import LemonGrove from '../game-objects/LemonGrove';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
@@ -187,12 +188,46 @@ const Quadrant1 = (props) => {
     }
   }
 
+  const fletchArrows = async () => {
+    let logs = false;
+    let feathers = false;
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'logs') {
+          logs = true;
+        }
+        if (doc.id === 'feathers') {
+          if (doc.data().amount >= 10) {
+            feathers = true;
+          }
+        }
+      })
+    })
+
+    if (feathers && logs) {
+      await ADD_XP(props.userRef, 'crafting', 50);
+      await REMOVE_ITEM(props.userRef, 'feathers', 10);
+      await REMOVE_ITEM(props.userRef, 'logs', 1);
+      await TAKE_ITEM(props.userRef, {
+        item: 'arrows',
+        amount: 10,
+        value: 3
+      });
+      props.addToFeed('You use a log and 10 feathers to create 10 arrows, gaining 50 crafting xp.');
+    } else {
+      props.addToFeed('You need logs and 10 feathers to do that.');
+    }
+  }
+
+
   return (
     <div className='quad-1' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 1: The Desert</h3>
       <Player x={position.x} y={position.y} />
       <Bakery bakeBread={() => bakeBread()} />
       <LemonGrove plantLemons={() => plantLemons()} />
+      <FletchingHut onFletch={() => fletchArrows()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )
