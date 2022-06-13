@@ -1,0 +1,9 @@
+.bird-roaster {
+  position: fixed;
+  left: 70vw;
+  bottom: 30vh;
+  width: 8vw;
+  height: 8vh;
+  border: 1px solid black;
+  background-color: gray;
+}

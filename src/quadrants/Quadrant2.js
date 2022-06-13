@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import Bird from '../game-objects/Bird';
+import BirdRoaster from '../game-objects/BirdRoaster';
 import FarmPatch from '../game-objects/FarmPatch';
 import Tree from '../game-objects/Tree';
 import ADD_XP from '../reducers/ADD_XP';
@@ -277,6 +278,18 @@ const Quadrant2 = (props) => {
         currentlyHunted: true,
         lastCatchDate: timestamp,
       })
+      await REMOVE_ITEM(props.userRef, 'arrows', 1);
+      await TAKE_ITEM(props.userRef, {
+        item: 'bird_meat',
+        amount: 1,
+        value: 10,
+      });
+      await TAKE_ITEM(props.userRef, {
+        item: 'feathers',
+        amount: 10,
+        value: 2,
+      });
+      await ADD_XP(props.userRef, 'hunting', 40);
       props.addToFeed('You use one arrow, and gain feathers, bird meat, and 40 hunting xp.');
     } else {
 
@@ -300,7 +313,7 @@ const Quadrant2 = (props) => {
           value: 2,
         });
         await ADD_XP(props.userRef, 'hunting', 40);
-        props.addToFeed('You use one arrow, and gain feathers, bird meat, and 40 hunting xp.');
+        props.addToFeed('You use one arrow, and gain 10 feathers, bird meat, and 40 hunting xp.');
         clearTimeout(birdTimeoutId);
         setBird({
           x: 0,
@@ -338,6 +351,42 @@ const Quadrant2 = (props) => {
     }
   }, [bird])
 
+  const cookBird = async () => {
+    let birdMeat = false;
+    let level = false;
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'bird_meat') {
+          birdMeat = true;
+        }
+      })
+    })
+
+    await props.userRef.get().then(doc => {
+      level = doc.data().cookingXp >= 750;
+    })
+
+    if (!level) {
+      props.addToFeed('You must have a cooking level of 10 to do that.');
+      return;
+    }
+
+    if (!birdMeat) {
+      props.addToFeed('You need some bird meat to do that.');
+      return;
+    }
+
+    await TAKE_ITEM(props.userRef, {
+      item: 'cooked_bird',
+      amount: 1,
+      value: 30,
+    })
+    await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
+    await ADD_XP(props.userRef, 'cooking', 50);
+    props.addToFeed('You cook the bird meat, gaining a cooked bird and 50 cooking xp.');
+  }
+
 
   return (
     <div className='quad-2' onClick={() => dummy.current.focus()}>
@@ -346,6 +395,7 @@ const Quadrant2 = (props) => {
       {bird.active ? <Bird x={bird.x} y={bird.y} huntBird={() => huntBird()}/> : null} 
       <FarmPatch farm={() => farmItems()} />
       <Tree cutTree={() => cutTree()} cut={!tree}/>
+      <BirdRoaster cookBird={() => cookBird()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )
