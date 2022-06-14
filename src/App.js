@@ -134,6 +134,7 @@ function App() {
                   featuresRef={firestore.collection('users').doc(user.uid).collection('game_features')}
                   saveStartCoords={(coordsObj) => setStartCoords(coordsObj)}
                   startCoords={startCoords}
+                  badgesRef={firestore.collection('badges')}
                 />
               }
             />

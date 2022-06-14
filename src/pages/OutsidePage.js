@@ -107,7 +107,9 @@ const OutsidePage = (props) => {
           itemsRef={props.itemsRef}
           userRef={props.userRef}
           featuresRef={props.featuresRef}
+          badgesRef={props.badgesRef}
           addToFeed={(text) => feedUpdater(text)}
+          addFitnessLevel={() => addFitnessLevel()}
         />
         : quadrant === 2 ? 
         <Quadrant2 
@@ -117,6 +119,7 @@ const OutsidePage = (props) => {
           itemsRef={props.itemsRef}
           userRef={props.userRef}
           featuresRef={props.featuresRef}
+          badgesRef={props.badgesRef}
           addToFeed={(text) => feedUpdater(text)}
           onCutTree={() => regrowTree()}
           regrown={regrownTree}
@@ -130,6 +133,7 @@ const OutsidePage = (props) => {
           itemsRef={props.itemsRef}
           userRef={props.userRef}
           featuresRef={props.featuresRef}
+          badgesRef={props.badgesRef}
           addToFeed={(text) => feedUpdater(text)}
           addFitnessLevel={() => addFitnessLevel()}
         />
@@ -141,6 +145,7 @@ const OutsidePage = (props) => {
           itemsRef={props.itemsRef}
           userRef={props.userRef}
           featuresRef={props.featuresRef}
+          badgesRef={props.badgesRef}
           addToFeed={(text) => feedUpdater(text)}
           onEnterStore={() => props.saveStartCoords({
             quad: 4,

@@ -141,7 +141,7 @@ const Quadrant3 = (props) => {
         value: 10,
       });
       await REMOVE_ITEM(props.userRef, 'feathers', 1);
-      await ADD_XP(props.userRef, 'hunting', 80);
+      await ADD_XP(props.userRef, 'hunting', 80, props.badgesRef);
       await props.featuresRef.doc('fish').set({
         currentlyCaught: true,
         lastCatchTime: currentTime,
@@ -170,7 +170,7 @@ const Quadrant3 = (props) => {
           value: 10,
         });
         await REMOVE_ITEM(props.userRef, 'feathers', 1);
-        await ADD_XP(props.userRef, 'hunting', 80);
+        await ADD_XP(props.userRef, 'hunting', 80, props.badgesRef);
         await props.featuresRef.doc('fish').set({
           currentlyCaught: true,
           lastCatchTime: currentTime,
@@ -246,7 +246,7 @@ const Quadrant3 = (props) => {
       await props.featuresRef.doc('house').set({
         upgrades: 1,
       })
-      await ADD_XP(props.userRef, 'construction', 97);
+      await ADD_XP(props.userRef, 'construction', 97, props.badgesRef,);
       await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
       props.addToFeed('You upgrade your house, gaining 97 construction xp.');
     } else {
@@ -257,7 +257,7 @@ const Quadrant3 = (props) => {
         await props.featuresRef.doc('house').set({
           upgrades: Number(houseData.upgrades) + 1,
         })
-        await ADD_XP(props.userRef, 'construction', 97);
+        await ADD_XP(props.userRef, 'construction', 97, props.badgesRef);
         await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
         props.addToFeed('You upgrade your house, gaining 97 construction xp.');
       }
@@ -295,7 +295,7 @@ const Quadrant3 = (props) => {
       amount: 1,
       value: 25,
     });
-    await ADD_XP(props.userRef, 'crafting', 215);
+    await ADD_XP(props.userRef, 'crafting', 215, props.badgesRef);
     props.addToFeed('You use some scrap metal and get a building tool and 215 crafting xp.');
   }
 
@@ -331,7 +331,7 @@ const Quadrant3 = (props) => {
         await props.featuresRef.doc('swimming_lap').set({
           lastLapDate: timestamp,
         });
-        await ADD_XP(props.userRef, 'fitness', 50, () => props.addFitnessLevel());
+        await ADD_XP(props.userRef, 'fitness', 50, props.badgesRef, () => props.addFitnessLevel());
         props.addToFeed('You swim a lap in the pool, gaining 50 fitness xp.');
       } else {
         props.addToFeed(`The water is too dangerous, it will be calm in ${50 - Math.floor(elapsed / 1000)} seconds.`)

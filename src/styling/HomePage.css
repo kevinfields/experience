@@ -9,8 +9,14 @@
   flex-direction: column;
   gap: 2vh;
   position: fixed;
-  left: 32.5vw;
+  left: 44.5vw;
   top: 25vh;
+  border: 2px solid white;
+  box-shadow: 2px 2px 2px 2px black;
+  border-radius: 5px;
+  background-color: darkblue;
+  padding: 1vw;
+  color: yellow;
 }
 
 .stats-header { 

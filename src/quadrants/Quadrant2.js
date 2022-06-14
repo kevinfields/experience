@@ -142,7 +142,7 @@ const Quadrant2 = (props) => {
         const newData = {
           currentlyFarming: false,
         };
-        await ADD_XP(props.userRef, 'farming', 30);
+        await ADD_XP(props.userRef, 'farming', 30, props.badgesRef);
         await TAKE_ITEM(props.userRef, {
           item: 'carrot',
           amount: 10,
@@ -229,7 +229,7 @@ const Quadrant2 = (props) => {
           amount: amount,
           value: 5,
         });
-        await ADD_XP(props.userRef, 'fitness', 10, () => props.addFitnessLevel());
+        await ADD_XP(props.userRef, 'fitness', 10, props.badgesRef, () => props.addFitnessLevel());
         await props.featuresRef.doc('tree').set({
           currentlyCut: true,
           cutTime: new Date(),
@@ -326,7 +326,7 @@ const Quadrant2 = (props) => {
           amount: 10,
           value: 2,
         });
-        await ADD_XP(props.userRef, 'hunting', 40);
+        await ADD_XP(props.userRef, 'hunting', 40, props.badgesRef,);
         props.addToFeed('You use one arrow, and gain 10 feathers, bird meat, and 40 hunting xp.');
         clearTimeout(birdTimeoutId);
         setBird({
@@ -404,7 +404,7 @@ const Quadrant2 = (props) => {
 
     if (!carrots) {
       await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
-      await ADD_XP(props.userRef, 'cooking', 50);
+      await ADD_XP(props.userRef, 'cooking', 50, props.badgesRef);
       await TAKE_ITEM(props.userRef, {
         item: 'cooked_bird',
         amount: 1,
@@ -412,8 +412,8 @@ const Quadrant2 = (props) => {
       });
       props.addToFeed('You cook the bird meat, gaining a cooked bird and 50 cooking xp.');
     } else {
-      await ADD_XP(props.userRef, 'fitness', 10, () => props.addFitnessLevel());
-      await ADD_XP(props.userRef, 'cooking', 50);
+      await ADD_XP(props.userRef, 'fitness', 10, props.badgesRef, () => props.addFitnessLevel());
+      await ADD_XP(props.userRef, 'cooking', 50, props.badgesRef);
       await REMOVE_ITEM(props.userRef, 'carrot', 1);
       await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
       await TAKE_ITEM(props.userRef, {
@@ -479,7 +479,7 @@ const Quadrant2 = (props) => {
             amount: 3,
             value: 15,
           });
-          await ADD_XP(props.userRef, 'farming', 150);
+          await ADD_XP(props.userRef, 'farming', 150, props.badgesRef);
           await props.featuresRef.doc('tea_farm').set({
             lastFarmDate: timestamp,
             currentlyFarming: false,

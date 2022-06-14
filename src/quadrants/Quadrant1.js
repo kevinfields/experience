@@ -124,7 +124,7 @@ const Quadrant1 = (props) => {
         value: 7,
         amount: 1,
       })
-      await ADD_XP(props.userRef, 'cooking', 10);
+      await ADD_XP(props.userRef, 'cooking', 10, props.badgesRef);
       props.addToFeed('You bake the bread dough.');
       props.addToFeed('You get a piece of bread and 10 cooking xp.');
     } else {
@@ -180,7 +180,7 @@ const Quadrant1 = (props) => {
             value: 5,
             amount: 5,
           })
-          await ADD_XP(props.userRef, 'farming', 50);
+          await ADD_XP(props.userRef, 'farming', 50, props.badgesRef);
           await props.featuresRef.doc('lemon_grove').set({
             currentlyFarming: false,
           })
@@ -224,7 +224,7 @@ const Quadrant1 = (props) => {
     })
 
     if (feathers && logs) {
-      await ADD_XP(props.userRef, 'crafting', 50);
+      await ADD_XP(props.userRef, 'crafting', 50, props.badgesRef);
       await REMOVE_ITEM(props.userRef, 'feathers', 10);
       await REMOVE_ITEM(props.userRef, 'logs', 1);
       await TAKE_ITEM(props.userRef, {
@@ -284,7 +284,7 @@ const Quadrant1 = (props) => {
       amount: 2,
     });
     await REMOVE_ITEM(props.userRef, 'fish', 1);
-    await ADD_XP(props.userRef, 'cooking', 150);
+    await ADD_XP(props.userRef, 'cooking', 150, props.badgesRef);
     props.addToFeed('You fry the fish into two smaller fried fish, gaining 150 cooking xp.');
 
   }
@@ -327,12 +327,46 @@ const Quadrant1 = (props) => {
     await REMOVE_ITEM(props.userRef, 'building_tool', 1);
     await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
     await ADD_COINS(props.userRef, 50);
-    await ADD_XP(props.userRef, 'construction', 200);
+    await ADD_XP(props.userRef, 'construction', 200, props.badgesRef);
     props.addToFeed('You use a building tool and house upgrade kit, gaining 200 construction xp.');
   }
 
   const box = async () => {
-    console.log('hi');
+    
+    let level = false;
+    await props.userRef.get().then(doc => {
+      level = doc.data().fitnessXp >= 2841;
+    });
+
+    if (!level) {
+      props.addToFeed('You need a fitness level of at least 14 to do that.');
+      return;
+    }
+
+    const timestamp = new Date();
+    let boxingData;
+    await props.featuresRef.doc('boxing_ring').get().then(doc => {
+      boxingData = doc.data();
+    })
+
+    if (boxingData === undefined) {
+      await props.featuresRef.doc('boxing_ring').set({
+        lastBoxed: timestamp,
+      });
+      ADD_XP(props.userRef, 'fitness', 150, props.badgesRef, () => props.addFitnessLevel);
+      props.addToFeed('You participate in a bout of boxing, gaining 150 fitness xp.');
+    } else {
+      let elapsed = timestamp.getTime() - (boxingData.lastBoxed.seconds * 1000);
+      if (elapsed >= 100000) {
+        await props.featuresRef.doc('boxing_ring').set({
+          lastBoxed: timestamp,
+        });
+        ADD_XP(props.userRef, 'fitness', 150, () => props.addFitnessLevel);
+        props.addToFeed('You participate in a bout of boxing, gaining 150 fitness xp.');
+      } else {
+        props.addToFeed(`You are currently recovering, you can box again in ${100 - Math.floor(elapsed / 1000)} seconds.`)
+      }
+    }
   }
 
 

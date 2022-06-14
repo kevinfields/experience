@@ -128,7 +128,7 @@ const Quadrant4 = (props) => {
     if (hammer && nails && logs) {
       await REMOVE_ITEM(props.userRef, 'nails', 1);
       await REMOVE_ITEM(props.userRef, 'logs', 1);
-      await ADD_XP(props.userRef, 'construction', '20');
+      await ADD_XP(props.userRef, 'construction', '20', props.badgesRef);
       props.addToFeed('You use a hammer, nails, and logs to make repairs.');
       props.addToFeed('You get 20 construction xp.')
     } else {
@@ -164,7 +164,7 @@ const Quadrant4 = (props) => {
         amount: 1,
         value: 15,
       });
-      await ADD_XP(props.userRef, 'medicine', 10, () => props.addMedicineLevel());
+      await ADD_XP(props.userRef, 'medicine', 10, props.badgesRef, () => props.addMedicineLevel());
       props.addToFeed('You make some medicine, and get 10 xp.'); 
     } else {
       props.addToFeed('You need a lemon and acetaminophen to do that.');
@@ -215,7 +215,7 @@ const Quadrant4 = (props) => {
     })
     await REMOVE_ITEM(props.userRef, 'logs', 1);
     await REMOVE_ITEM(props.userRef, 'nails', 1);
-    await ADD_XP(props.userRef, 'crafting', 100);
+    await ADD_XP(props.userRef, 'crafting', 100, props.badgesRef);
     props.addToFeed('You use a nail and some logs to make a house upgrade kit, gaining 100 crafting xp.');
   }
 
@@ -256,7 +256,7 @@ const Quadrant4 = (props) => {
       return;
     }
 
-    await ADD_XP(props.userRef, 'medicine', 100, () => props.addMedicineLevel());
+    await ADD_XP(props.userRef, 'medicine', 100, props.badgesRef, () => props.addMedicineLevel());
     await TAKE_ITEM(props.userRef, {
       item: 'advanced_medicine',
       value: 50,
