@@ -83,6 +83,19 @@
   background-color: skyblue;
 }
 
+.buy-ten-button {
+  background-color: transparent;
+  border-radius: 5px;
+  width: 9.4vw;
+  height: 3vh;
+  border-color: yellow;
+  color: yellow;
+}
+
+.buy-ten-button:hover {
+  cursor: pointer;
+  background-color: lightblue;
+}
 
 .sell-item-button {
   background-color: transparent;

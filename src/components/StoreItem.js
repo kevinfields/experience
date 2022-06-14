@@ -13,7 +13,16 @@ const StoreItem = (props) => {
           value: props.value,
         })}>
           Buy
-      </button> 
+      </button>
+      <button
+        className='buy-ten-button'
+        onClick={() => props.buyItem({
+          item: props.item,
+          amount: 10,
+          value: props.value,
+        })}>
+          Buy 10
+        </button>
     </div>
   )
 }

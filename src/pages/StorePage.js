@@ -43,10 +43,10 @@ const StorePage = (props) => {
   };
 
   const buyItem = async (itemObj) => {
-    await REMOVE_COINS(props.userRef, itemObj.value).then(res => {
+    await REMOVE_COINS(props.userRef, (itemObj.value * itemObj.amount)).then(res => {
       if (res === 'success') {
         TAKE_ITEM(props.userRef, itemObj);
-        setCoins(coins - itemObj.value);
+        setCoins(coins - (itemObj.value * itemObj.amount));
       }
     });
     // it might be easier to just loadBankData() here but that seems unneccessary if 
@@ -65,8 +65,8 @@ const StorePage = (props) => {
     if (owned) {
       const newData = {
         item: itemObj.item,
-        amount: amount + 1,
-        value: itemObj.value * (Number(amount) + 1),
+        amount: amount + itemObj.amount,
+        value: itemObj.value * (Number(amount) + itemObj.amount),
       };
       let itemCatcher = items.filter(item => item.item !== itemObj.item);
       itemCatcher.push(newData);
@@ -75,7 +75,7 @@ const StorePage = (props) => {
 
       const newData = {
         item: itemObj.item,
-        amount: 1,
+        amount: itemObj.amount,
         value: itemObj.value,
       }
       let itemCatcher = [...items];
