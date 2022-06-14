@@ -1,16 +1,15 @@
-.bakery {
+.farming-patch {
   position: fixed;
   left: 40vw;
-  bottom: 60vh;
+  top: 40vh;
   width: 10vw;
   height: 10vh;
-  border: 1px solid red;
+  border: 1px solid brown;
   background-color: brown;
-  color: yellow;
   text-align: center;
 }
 
-.bakery:hover {
+.farming-patch:hover {
   cursor: pointer;
-  background-color: rgb(91, 25, 25);
+  background-color: rgb(107, 29, 29);
 }

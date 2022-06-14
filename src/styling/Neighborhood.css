@@ -9,3 +9,8 @@
   color: yellow;
   text-align: center;
 }
+
+.neighborhood:hover {
+  cursor: pointer;
+  background-color: rgb(116, 52, 23);
+}

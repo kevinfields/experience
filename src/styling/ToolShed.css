@@ -1,16 +1,15 @@
-.house {
+.tool-shed {
   position: fixed;
-  left: 25vw;
+  left: 50vw;
   bottom: 70vh;
   width: 10vw;
   height: 10vh;
   border: 1px solid brown;
-  background-color: pink;
-  color: red;
+  background-color: tan;
   text-align: center;
 }
 
-.house:hover {
+.tool-shed:hover {
   cursor: pointer;
-  background-color: rgb(217, 102, 121);
+  background-color: rgb(209, 156, 86)
 }

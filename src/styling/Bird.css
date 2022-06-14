@@ -6,3 +6,8 @@
   color: red;
   text-align: center;
 }
+
+.bird:hover {
+  cursor: pointer;
+  background-color: darkgray;
+}

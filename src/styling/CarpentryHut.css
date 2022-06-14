@@ -7,4 +7,10 @@
   border: 1px solid blue;
   background-color: tan;
   color: blue;
+  text-align: center;
+}
+
+.carpentry-hut:hover {
+  cursor: pointer;
+  background-color: rgb(167, 139, 104);
 }

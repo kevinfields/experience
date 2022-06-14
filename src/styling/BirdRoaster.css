@@ -8,3 +8,8 @@
   background-color: gray;
   text-align: center;
 }
+
+.bird-roaster:hover {
+  cursor: pointer;
+  background-color: rgb(88, 88, 88);
+}

@@ -17,9 +17,9 @@ TIER      1             2               3
 
 SKILL 
 cooking   bakeryX       bird roastX     fish fryX
-crafting  fletch hutX   furniture hut   tool hut
-const.    neighborhoodX house           palace
-farming   carrotsX      lemonsX         tea leaves
+crafting  fletch hutX   furniture hutX  tool hut
+const.    neighborhoodX houseX          palace
+farming   carrotsX      lemonsX         tea leavesX
 fitness   treeX         swimming        boxing (palace)
 hunting   birdX         fishX           bear 
-medicine  basicX        advanced        potions
+medicine  basicX        advancedX       potions

@@ -131,6 +131,7 @@ const OutsidePage = (props) => {
           userRef={props.userRef}
           featuresRef={props.featuresRef}
           addToFeed={(text) => feedUpdater(text)}
+          addFitnessLevel={() => addFitnessLevel()}
         />
         : 
         <Quadrant4 

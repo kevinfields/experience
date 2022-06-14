@@ -1,0 +1,16 @@
+.upgrade-lab {
+  position: fixed;
+  left: 30vw;
+  bottom: 70vh;
+  width: 8vw;
+  height: 8vh;
+  border: 1px solid red;
+  background-color: white;
+  color: red;
+  text-align: center;
+}
+
+.upgrade-lab:hover {
+  cursor: pointer;
+  background-color: rgb(179, 179, 179);
+}

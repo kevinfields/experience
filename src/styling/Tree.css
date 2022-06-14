@@ -19,3 +19,8 @@
   background-color: green;
   text-align: center;
 }
+
+.tree:hover {
+  cursor: pointer;
+  background-color: rgb(108, 50, 9);
+}

@@ -1,0 +1,16 @@
+.boxing-ring {
+  position: fixed;
+  left: 60vw;
+  bottom: 65vh;
+  width: 7vw;
+  height: 7vh;
+  border: 1px solid red;
+  background-color: blue;
+  color: yellow;
+  text-align: center;
+}
+
+.boxing-ring:hover {
+  cursor: pointer;
+  background-color: darkblue;
+}

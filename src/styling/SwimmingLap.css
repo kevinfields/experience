@@ -1,0 +1,17 @@
+.swimming-lap {
+  position: fixed;
+  left: 40vw;
+  bottom: 40vh;
+  width: 15vw;
+  height: 15vh;
+  border: 1px solid blue;
+  border-radius: 30px;
+  background-color: skyblue;
+  color: yellow;
+  text-align: center;
+}
+
+.swimming-lap:hover {
+  cursor: pointer;
+  background-color: rgb(89, 154, 180);
+}

@@ -8,3 +8,8 @@
   background-color: sienna;
   text-align: center;
 }
+
+.fletching-hut:hover {
+  cursor: pointer;
+  background-color: rgb(112, 53, 26);
+}

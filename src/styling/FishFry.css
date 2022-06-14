@@ -9,3 +9,8 @@
   color: blue;
   text-align: center;
 }
+
+.fish-fry:hover {
+  cursor: pointer;
+  background-color: rgb(174, 113, 0);
+}

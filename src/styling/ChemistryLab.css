@@ -9,3 +9,8 @@
   color: blue;
   text-align: center;
 }
+
+.chemistry-lab:hover {
+  cursor: pointer;
+  background-color: rgb(196, 135, 145);
+}

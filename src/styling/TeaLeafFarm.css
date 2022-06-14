@@ -9,3 +9,8 @@
   color: yellow;
   text-align: center;
 }
+
+.tea-leaf-farm:hover {
+  cursor: pointer;
+  background-color: darkgreen;
+}

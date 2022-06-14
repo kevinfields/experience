@@ -2,9 +2,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import xpToLevel from '../functions/xpToLevel';
 import Bakery from '../game-objects/Bakery';
+import BoxingRing from '../game-objects/BoxingRing';
 import FishFry from '../game-objects/FishFry';
 import FletchingHut from '../game-objects/FletchingHut';
 import LemonGrove from '../game-objects/LemonGrove';
+import Palace from '../game-objects/Palace';
+import ADD_COINS from '../reducers/ADD_COINS';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
@@ -242,6 +245,7 @@ const Quadrant1 = (props) => {
       return;
     }
     let fish = false;
+    let pan = false;
     let level = false;
 
     await props.itemsRef.get().then(snap => {
@@ -249,11 +253,19 @@ const Quadrant1 = (props) => {
         if (doc.id === 'fish') {
           fish = true;
         }
+        if (doc.id === 'cooking_pan') {
+          pan = true;
+        }
       })
     })
 
     if (!fish) {
       props.addToFeed('You need a fish to do that.');
+      return;
+    }
+
+    if (!pan) {
+      props.addToFeed('You need a cooking pan to do that.');
       return;
     }
     
@@ -277,11 +289,59 @@ const Quadrant1 = (props) => {
 
   }
 
+  const upgradePalace = async () => {
+
+    let level = false;
+    let upgradeKit = false;
+    let hammer = false;
+    let tool = false;
+
+    await props.userRef.get().then(doc => {
+      level = doc.data().constructionXp >= 4145;
+    });
+
+    if (!level) {
+      props.addToFeed('You need a construction level of at least 15 to do that.');
+      return;
+    }
+
+    await props.itemsRef.get().then(snap => {
+      snap.forEach(doc => {
+        if (doc.id === 'house_upgrade') {
+          upgradeKit = true;
+        }
+        if (doc.id === 'hammer') {
+          hammer = true;
+        }
+        if (doc.id === 'building_tool') {
+          tool = true;
+        }
+      })
+    })
+
+    if (!upgradeKit || !hammer || !tool) {
+      props.addToFeed('You need a house upgrade kit, hammer, and building tool to do that.');
+      return;
+    }
+
+    await REMOVE_ITEM(props.userRef, 'building_tool', 1);
+    await REMOVE_ITEM(props.userRef, 'house_upgrade', 1);
+    await ADD_COINS(props.userRef, 50);
+    await ADD_XP(props.userRef, 'construction', 200);
+    props.addToFeed('You use a building tool and house upgrade kit, gaining 200 construction xp.');
+  }
+
+  const box = async () => {
+    console.log('hi');
+  }
+
 
   return (
     <div className='quad-1' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 1: The Desert</h3>
       <Player x={position.x} y={position.y} />
+      <BoxingRing box={() => box()} />
+      <Palace upgradePalace={() => upgradePalace()} />
       <Bakery bakeBread={() => bakeBread()} />
       <LemonGrove plantLemons={() => plantLemons()} />
       <FletchingHut onFletch={() => fletchArrows()} />

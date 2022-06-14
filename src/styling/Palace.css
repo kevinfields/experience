@@ -1,0 +1,16 @@
+.palace {
+  position: fixed;
+  left: 70vw;
+  bottom: 60vh;
+  width: 20vw;
+  height: 20vh;
+  border: 1px solid gold;
+  background-color: silver;
+  color: purple;
+  text-align: center;
+}
+
+.palace:hover {
+  cursor: pointer;
+  background-color: rgb(113, 113, 113);
+}

@@ -5,13 +5,5 @@
   background-color: lightgreen;
 }
 
-.farm-patch {
-  position: fixed;
-  left: 40vw;
-  top: 40vh;
-  width: 10vw;
-  height: 10vh;
-  border: 1px solid brown;
-  background-color: brown;
-}
+
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react'
 import Player from '../components/Player';
 import Fish from '../game-objects/Fish';
 import House from '../game-objects/House';
+import SwimmingLap from '../game-objects/SwimmingLap';
+import ToolShed from '../game-objects/ToolShed';
 import ADD_XP from '../reducers/ADD_XP';
 import REMOVE_ITEM from '../reducers/REMOVE_ITEM';
 import TAKE_ITEM from '../reducers/TAKE_ITEM';
@@ -262,12 +264,90 @@ const Quadrant3 = (props) => {
     }
   }
 
+  const makeTool = async () => {
+
+    let level = false;
+    let scrap = false;
+
+    await props.userRef.get().then(doc => {
+      level = doc.data().craftingXp >= 6101;
+    });
+
+    if (!level) {
+      props.addToFeed('You need a crafting level of at least 16 to do that.');
+      return;
+    }
+
+    await props.itemsRef.doc('scrap_metal').get().then(doc => {
+      if (doc.data() !== undefined) {
+        scrap = true;
+      }
+    });
+
+    if (!scrap) {
+      props.addToFeed('You need some scrap metal to do that.');
+      return;
+    }
+
+    await REMOVE_ITEM(props.userRef, 'scrap_metal', 1);
+    await TAKE_ITEM(props.userRef, {
+      item: 'building_tool',
+      amount: 1,
+      value: 25,
+    });
+    await ADD_XP(props.userRef, 'crafting', 215);
+    props.addToFeed('You use some scrap metal and get a building tool and 215 crafting xp.');
+  }
+
+  const swimLap = async () => {
+    
+    let level = false;
+    
+    await props.userRef.get().then(doc => {
+      level = doc.data().fitnessXp >= 750;
+    })
+
+    if (!level) {
+      props.addToFeed('You need a fitness level of at least 10 to do that.');
+      return;
+    }
+
+    let swimData;
+    await props.featuresRef.doc('swimming_lap').get().then(doc => {
+      swimData = doc.data();
+    });
+
+    const timestamp = new Date();
+    if (swimData === undefined) {
+      await props.featuresRef.doc('swimming_lap').set({
+        lastLapDate: timestamp,
+      });
+      await ADD_XP(props.userRef, 'fitness', 50, () => props.addFitnessLevel());
+      props.addToFeed('You swim a lap in the pool, gaining 50 fitness xp.');
+    } else {
+      let elapsed = timestamp.getTime() - swimData.lastLapDate.seconds * 1000;
+
+      if (elapsed >= 50000) {
+        await props.featuresRef.doc('swimming_lap').set({
+          lastLapDate: timestamp,
+        });
+        await ADD_XP(props.userRef, 'fitness', 50, () => props.addFitnessLevel());
+        props.addToFeed('You swim a lap in the pool, gaining 50 fitness xp.');
+      } else {
+        props.addToFeed(`The water is too dangerous, it will be calm in ${50 - Math.floor(elapsed / 1000)} seconds.`)
+      }
+    }
+
+  }
+
   return (
     <div className='quad-3' onClick={() => dummy.current.focus()}>
       <h3 className='quad-header'>Quadrant 3: The Ocean</h3>
       <Player x={position.x} y={position.y} />
       {fish.active ? <Fish x={fish.x} y={fish.y} onFlyFish={() => flyFish()} /> : null}
       <House upgradeHouse={() => upgradeHouse()} />
+      <ToolShed makeTool={() => makeTool()}/>
+      <SwimmingLap swimLap={() => swimLap()} />
       <input ref={dummy} type='text' onChange={(e) => changePosition(e.target.value)} value={move} className='control-ref'/>
     </div>
   )

@@ -6,3 +6,8 @@
   color: red;
   text-align: center;
 }
+
+.fish:hover {
+  cursor: pointer;
+  background: rgb(59, 193, 59);
+}

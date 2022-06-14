@@ -248,6 +248,7 @@ const Quadrant4 = (props) => {
 
     if (!tealeaf) {
       props.addToFeed('You need a tea leaf to do that.');
+      return;
     }
 
     if (!medicine) {
@@ -255,7 +256,7 @@ const Quadrant4 = (props) => {
       return;
     }
 
-    await ADD_XP(props.userRef, 'medicine', 50);
+    await ADD_XP(props.userRef, 'medicine', 100, () => props.addMedicineLevel());
     await TAKE_ITEM(props.userRef, {
       item: 'advanced_medicine',
       value: 50,
@@ -263,6 +264,7 @@ const Quadrant4 = (props) => {
     });
     await REMOVE_ITEM(props.userRef, 'basic_medicine', 1);
     await REMOVE_ITEM(props.userRef, 'tea_leaf', 1);
+    props.addToFeed('You use a tea leaf and some basic medicine to make advanced medicine, gaining 100 medicine xp')
   }
 
   return (

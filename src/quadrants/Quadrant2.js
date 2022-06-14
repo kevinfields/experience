@@ -372,12 +372,16 @@ const Quadrant2 = (props) => {
       return;
     }
     let birdMeat = false;
+    let carrots = false;
     let level = false;
 
     await props.itemsRef.get().then(snap => {
       snap.forEach(doc => {
         if (doc.id === 'bird_meat') {
           birdMeat = true;
+        }
+        if (doc.id === 'carrot') {
+          carrots = true;
         }
       })
     })
@@ -396,14 +400,29 @@ const Quadrant2 = (props) => {
       return;
     }
 
-    await TAKE_ITEM(props.userRef, {
-      item: 'cooked_bird',
-      amount: 1,
-      value: 30,
-    })
-    await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
-    await ADD_XP(props.userRef, 'cooking', 50);
-    props.addToFeed('You cook the bird meat, gaining a cooked bird and 50 cooking xp.');
+    
+
+    if (!carrots) {
+      await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
+      await ADD_XP(props.userRef, 'cooking', 50);
+      await TAKE_ITEM(props.userRef, {
+        item: 'cooked_bird',
+        amount: 1,
+        value: 30,
+      });
+      props.addToFeed('You cook the bird meat, gaining a cooked bird and 50 cooking xp.');
+    } else {
+      await ADD_XP(props.userRef, 'fitness', 10, () => props.addFitnessLevel());
+      await ADD_XP(props.userRef, 'cooking', 50);
+      await REMOVE_ITEM(props.userRef, 'carrot', 1);
+      await REMOVE_ITEM(props.userRef, 'bird_meat', 1);
+      await TAKE_ITEM(props.userRef, {
+        item: 'cooked_bird',
+        amount: 1,
+        value: 30,
+      });
+      props.addToFeed('You cook the bird meat with carrots, gaining a cooked bird, 10 fitness xp, and 50 cooking xp.');
+    }
   }
 
   const harvestTeaLeaves = async () => {
@@ -430,42 +449,56 @@ const Quadrant2 = (props) => {
       })
     });
 
-    if (!seeds) {
-      props.addToFeed('You need a tea seed to do that.');
-      return;
-    }
+    
 
     await props.featuresRef.doc('tea_farm').get().then(doc => {
       farmData = doc.data();
     })
 
     if (farmData === undefined) {
+      if (!seeds) {
+        props.addToFeed('You need a tea seed to do that.');
+        return;
+      }
       await props.featuresRef.doc('tea_farm').set({
         lastFarmDate: timestamp,
+        currentlyFarming: true
       });
-      await TAKE_ITEM(props.userRef, {
-        item: 'tea_leaf',
-        amount: 3,
-        value: 15,
-      });
-      await ADD_XP(props.userRef, 'farming', 150);
-      props.addToFeed('You get 3 tea leaves and 150 farming xp.');
+      
+      await REMOVE_ITEM(props.userRef, 'tea_seed', 1);
+      props.addToFeed('You plant a tea seed.');
+      console.log('farm data was undefined');
     } else {
+
       let elapsed = (timestamp.getTime() - (farmData.lastFarmDate.seconds * 1000));
 
-      if (elapsed >= 100000) {
-        props.featuresRef.doc('tea_farm').set({
+      if (farmData.currentlyFarming) {
+        if (elapsed >= 100000) {
+          await TAKE_ITEM(props.userRef, {
+            item: 'tea_leaf',
+            amount: 3,
+            value: 15,
+          });
+          await ADD_XP(props.userRef, 'farming', 150);
+          await props.featuresRef.doc('tea_farm').set({
+            lastFarmDate: timestamp,
+            currentlyFarming: false,
+          })
+          props.addToFeed('You get 3 tea leaves and 150 farming xp.');
+        } else {
+          props.addToFeed(`Your tea leaves will be ready in ${Math.floor(100 - (elapsed / 1000))} seconds`);
+        }
+      } else {
+        if (!seeds) {
+          props.addToFeed('You need a tea seed to do that.');
+          return;
+        }
+        await REMOVE_ITEM(props.userRef, 'tea_seed', 1);
+        props.addToFeed('You plant a tea seed.');
+        await props.featuresRef.doc('tea_farm').set({
+          currentlyFarming: true,
           lastFarmDate: timestamp,
         })
-        await TAKE_ITEM(props.userRef, {
-          item: 'tea_leaf',
-          amount: 3,
-          value: 15,
-        });
-        await ADD_XP(props.userRef, 'farming', 150);
-        props.addToFeed('You get 3 tea leaves and 150 farming xp.');
-      } else {
-        props.addToFeed(`Your tea leaves will be ready in ${Math.floor(elapsed / 1000)} seconds`);
       }
     }
   }
