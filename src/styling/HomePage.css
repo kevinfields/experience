@@ -11,6 +11,7 @@
   position: fixed;
   left: 44.5vw;
   top: 25vh;
+  height: 50vh;
   border: 2px solid white;
   box-shadow: 2px 2px 2px 2px black;
   border-radius: 5px;
@@ -23,4 +24,69 @@
   margin: 0px;
   text-align: center;
   font-size: 15pt;
+}
+
+.badges-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 25vw;
+  height: 50vh;
+  border: 2px solid white;
+  background-color: darkblue;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 2px black;
+  position: fixed;
+  left: 16vw;
+  top: 25vh;
+  padding: 1vw;
+  color: yellow;
+  gap: 2vh;
+  align-content: flex-start;
+}
+
+.badges-header {
+  margin: 0px;
+  text-align: center;
+  font-size: 15pt;
+}
+
+.badge-1 {
+  border: 1px solid lightgreen;
+  background-color: transparent;
+  color: lightgreen;
+  width: 7.5vw;
+  height: 7.5vw;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.badge-2 {
+  border: 1px solid yellow;
+  background-color: transparent;
+  color: yellow;
+  width: 7.5vw;
+  height: 7.5vw;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.badge-3 {
+  border: 1px solid red;
+  background-color: transparent;
+  color: red;
+  width: 7.5vw;
+  height: 7.5vw;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.badge-title {
+  font-size: 10pt;
+  margin-top: 1vh;
+}
+
+.badge-desc {
+  font-size: 8pt;
+  margin-top: 1vh;
 }
